@@ -4,8 +4,13 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <thread>
+#include <vector>
+#include <cstring>
+#include <time.h>
 
 using namespace std;
+
+#pragma warning(disable:4996)
 
 cv::Mat in_img;
 
@@ -63,7 +68,15 @@ int main() {
     //in_imgの初期化
     in_img = cv::Mat(1080, 1920, CV_8UC1, cv::Scalar::all(255));
 
-    cv::Mat a = cv::Mat(1080, 1920, CV_8UC1, cv::Scalar::all(255));
+    //画像保存用のVector用意
+    vector<cv::Mat> save_img;
+    string save_dir = "E:\\Github_output\\CoaXpressCam\\GetImgs\\";
+    time_t now = time(NULL);
+    struct tm* pnow = localtime(&now);
+    char buff[128] = "";
+    sprintf(buff, "%04d%02d%02d%02d%02d",1900+pnow->tm_year, 1+pnow->tm_mon, pnow->tm_mday, pnow->tm_hour, pnow->tm_min);
+    save_dir += string(buff);
+
 	
 	//KYの動作確認
 	status = KY_GetSoftwareVersion(&ver);
@@ -94,6 +107,19 @@ int main() {
         cv::imshow("img", in_img);
         int key = cv::waitKey(1);
         if (key == 'q')break;
+        else if (key == 's')
+        {
+            save_img.push_back(in_img.clone());
+        }
+    }
+
+    //画像の保存
+    
+    for (int i = 0; i < save_img.size(); i++)
+    {
+        sprintf(buff, "img%03d.png", i);
+        string img_name = string(buff);
+        cv::imwrite(save_dir + img_name, save_img[i]);
     }
 
 
