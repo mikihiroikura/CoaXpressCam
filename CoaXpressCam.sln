@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GetImgs", "GetImgs\GetImgs.vcxproj", "{B0826919-3369-4A75-9830-79842E603BE0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KAYACoaXpressLib", "library\KAYACoaXpressLib\KAYACoaXpressLib.vcxproj", "{F9D45842-71DB-4942-AEDC-8508F69A0500}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "library", "library", "{385F2B12-5CA2-4091-A6D4-0454BA2DA8F7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GetImgs_withLib", "GetImgs_withLib\GetImgs_withLib.vcxproj", "{8A634424-CB7C-4607-9C19-AC240CFBEE12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,9 +27,28 @@ Global
 		{B0826919-3369-4A75-9830-79842E603BE0}.Release|x64.Build.0 = Release|x64
 		{B0826919-3369-4A75-9830-79842E603BE0}.Release|x86.ActiveCfg = Release|Win32
 		{B0826919-3369-4A75-9830-79842E603BE0}.Release|x86.Build.0 = Release|Win32
+		{F9D45842-71DB-4942-AEDC-8508F69A0500}.Debug|x64.ActiveCfg = Debug|x64
+		{F9D45842-71DB-4942-AEDC-8508F69A0500}.Debug|x64.Build.0 = Debug|x64
+		{F9D45842-71DB-4942-AEDC-8508F69A0500}.Debug|x86.ActiveCfg = Debug|Win32
+		{F9D45842-71DB-4942-AEDC-8508F69A0500}.Debug|x86.Build.0 = Debug|Win32
+		{F9D45842-71DB-4942-AEDC-8508F69A0500}.Release|x64.ActiveCfg = Release|x64
+		{F9D45842-71DB-4942-AEDC-8508F69A0500}.Release|x64.Build.0 = Release|x64
+		{F9D45842-71DB-4942-AEDC-8508F69A0500}.Release|x86.ActiveCfg = Release|Win32
+		{F9D45842-71DB-4942-AEDC-8508F69A0500}.Release|x86.Build.0 = Release|Win32
+		{8A634424-CB7C-4607-9C19-AC240CFBEE12}.Debug|x64.ActiveCfg = Debug|x64
+		{8A634424-CB7C-4607-9C19-AC240CFBEE12}.Debug|x64.Build.0 = Debug|x64
+		{8A634424-CB7C-4607-9C19-AC240CFBEE12}.Debug|x86.ActiveCfg = Debug|Win32
+		{8A634424-CB7C-4607-9C19-AC240CFBEE12}.Debug|x86.Build.0 = Debug|Win32
+		{8A634424-CB7C-4607-9C19-AC240CFBEE12}.Release|x64.ActiveCfg = Release|x64
+		{8A634424-CB7C-4607-9C19-AC240CFBEE12}.Release|x64.Build.0 = Release|x64
+		{8A634424-CB7C-4607-9C19-AC240CFBEE12}.Release|x86.ActiveCfg = Release|Win32
+		{8A634424-CB7C-4607-9C19-AC240CFBEE12}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F9D45842-71DB-4942-AEDC-8508F69A0500} = {385F2B12-5CA2-4091-A6D4-0454BA2DA8F7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {248D2B59-5188-498A-9899-A0F77093D24F}

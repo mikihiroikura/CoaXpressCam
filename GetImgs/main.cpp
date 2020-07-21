@@ -7,12 +7,16 @@
 #include <vector>
 #include <cstring>
 #include <time.h>
+#include <Windows.h>
 
 using namespace std;
 
 #pragma warning(disable:4996)
 
 cv::Mat in_img;
+LARGE_INTEGER freq, start, end2;
+double logtime;
+vector<cv::Mat> cycle_buffer_imgs;
 
 //コールバック関数
 void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
@@ -51,6 +55,39 @@ void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
     }
 }
 
+//コールバック関数
+void Stream_callback_func2(void* userContext, STREAM_HANDLE streamHandle)
+{
+    
+
+    static KYBOOL copyingDataFlag = KYFALSE;
+    long long totalFrames = 0, buffSize = 0;
+    int buffIndex;
+    void* buffData;
+
+    if (0 == streamHandle)		// callback with indicator for acquisition stop
+    {
+        copyingDataFlag = KYFALSE;
+        return;
+    }
+
+    totalFrames = KYFG_GetGrabberValueInt(streamHandle, "RXFrameCounter");
+    buffSize = KYFG_StreamGetSize(streamHandle);			// get buffer size 1920x1080
+    buffIndex = KYFG_StreamGetFrameIndex(streamHandle);
+    buffData = KYFG_StreamGetPtr(streamHandle, buffIndex);		// get pointer of buffer data
+
+    if (KYFALSE == copyingDataFlag)
+    {
+        copyingDataFlag = KYTRUE;
+        printf("\rGood callback buffer handle:%X, current index:%d, total frames:%lld        ", streamHandle, buffIndex, totalFrames); //\rは同じ行の先頭に戻ることを意味する
+        memcpy(cycle_buffer_imgs[buffIndex].data, buffData, buffSize);			// copy data to local buffer
+        //... Show Image with data ...
+        //cv::imshow("img", in_img);
+        copyingDataFlag = KYFALSE;
+        printf(" logtime: %.6f", logtime);
+    }
+}
+
 int main() {
 	KY_SOFTWARE_VERSION ver;
 	KY_DEVICE_INFO device_info;
@@ -66,7 +103,12 @@ int main() {
 	ver.struct_version = 0;
 
     //in_imgの初期化
+    int cyclebuffersize = 20;
     in_img = cv::Mat(1080, 1920, CV_8UC1, cv::Scalar::all(255));
+    for (size_t i = 0; i < cyclebuffersize; i++)
+    {
+        cycle_buffer_imgs.push_back(in_img.clone());
+    }
 
     //画像保存用のVector用意
     vector<cv::Mat> save_img;
@@ -76,6 +118,9 @@ int main() {
     char buff[128] = "";
     sprintf(buff, "%04d%02d%02d%02d%02d",1900+pnow->tm_year, 1+pnow->tm_mon, pnow->tm_mday, pnow->tm_hour, pnow->tm_min);
     save_dir += string(buff);
+
+    //時間変数の設定
+    if (!QueryPerformanceFrequency(&freq)) return 0;
 
 	
 	//KYの動作確認
@@ -92,25 +137,30 @@ int main() {
 	status = KYFG_CameraOpen2(camhandle, NULL);//カメラを開く
 
 	//カメラの動作設定
-    status = KYFG_CameraCallbackRegister(camhandle, Stream_callback_func, 0); //Callback関数をセット
+    status = KYFG_CameraCallbackRegister(camhandle, Stream_callback_func2, 0); //Callback関数をセット
     KYFG_SetCameraValueInt(camhandle, "Width", 1920);
     KYFG_SetCameraValueInt(camhandle, "Height", 1080); //画像のWxHをセット
     status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "PixelFormat", "Mono8");
 
-    status = KYFG_StreamCreateAndAlloc(camhandle, &streamhandle, 16, 0);//Cyclic frame bufferのStreamの設定
+    status = KYFG_StreamCreateAndAlloc(camhandle, &streamhandle, cyclebuffersize, 0);//Cyclic frame bufferのStreamの設定
 
     status = KYFG_CameraStart(camhandle, streamhandle, 0);//カメラの動作開始，Framesを0にすると連続して画像を取り続ける
     //これ以降カメラのLEDが緑になる
 
     while (1)
     {
-        cv::imshow("img", in_img);
+        //時間計測開始
+        QueryPerformanceCounter(&start);
+        cv::imshow("img", cycle_buffer_imgs[0]);
         int key = cv::waitKey(1);
         if (key == 'q')break;
-        else if (key == 's')
+        else if (key == 'p')
         {
-            save_img.push_back(in_img.clone());
+            save_img.push_back(cycle_buffer_imgs[0].clone());
         }
+        //時間計測終了
+        QueryPerformanceCounter(&end2);
+        logtime = (double)(end2.QuadPart - start.QuadPart) / freq.QuadPart;
     }
 
     //画像の保存

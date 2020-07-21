@@ -1,0 +1,56 @@
+#pragma once
+
+///
+/// @file		KAYACoaXpressClass.cpp
+/// @brief		KAYACoaXpress Optronicsカメラ
+/// @author		Mikihiro Ikura
+/// @date		2020/7/21 作成
+/// @date		2020/7/21 最終更新
+/// @version	1.0.0
+///
+
+#include <HSC/Camera.hpp>
+#include <KYFGLib.h>
+#include <KYFGcppLib.h>
+#include <clserkyi.h>
+
+#pragma comment(lib,"clserkyi_vc141.lib")
+#pragma comment(lib,"KYFGLib.lib")
+#pragma comment(lib,"KYFGLib_vc141.lib")
+
+class kayacoaxpress : public Camera
+{
+private:
+	static constexpr int CAM_WIDTH = 1920;
+	static constexpr int CAM_HEIGHT = 1080;
+	static constexpr int CAM_FPS = 1000;
+
+	static int status;
+	static int pcie_device_num;
+	static int cam_detect_cnt;
+	FGHANDLE fg_handle;
+	CAMHANDLE cam_handle;
+	STREAM_HANDLE stream_handle;
+
+public:
+	kayacoaxpress();
+	~kayacoaxpress();
+
+	void connect(int id);
+	void disconnect();
+
+	void start();
+	void stop();
+
+	void captureFrame(void* data);
+
+	void setParam(const paramTypeCamera::paramInt& pT, const int param);
+	void setParam(const paramTypeCamera::paramFloat& pT, const float param);
+	int getParam(const paramTypeCamera::paramInt& pT);
+	float getParam(const paramTypeCamera::paramFloat& pT);
+
+
+
+
+	void kayacoaxpressMessage(std::string str);
+};
