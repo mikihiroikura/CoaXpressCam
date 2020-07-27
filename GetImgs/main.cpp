@@ -36,9 +36,11 @@ void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
     totalFrames = KYFG_GetGrabberValueInt(streamHandle, "RXFrameCounter");
     buffSize = KYFG_StreamGetSize(streamHandle);			// get buffer size
     buffIndex = KYFG_StreamGetFrameIndex(streamHandle);
-    buffData = KYFG_StreamGetPtr(streamHandle, buffIndex);		// get pointer of buffer data
+    int callno = buffIndex - 2;
+    if (callno < 0) callno += 200;
+    buffData = KYFG_StreamGetPtr(streamHandle, callno);		// get pointer of buffer data
 
-    if (KYFALSE == copyingDataFlag)
+    if (KYFALSE == copyingDataFlag&&totalFrames>10)
     {
         copyingDataFlag = KYTRUE;
         data = (void*)realloc(data, buffSize); 		// allocate size for local buffer
@@ -140,6 +142,7 @@ int main() {
     status = KYFG_CameraCallbackRegister(camhandle, Stream_callback_func2, 0); //Callback関数をセット
     KYFG_SetCameraValueInt(camhandle, "Width", 1920);
     KYFG_SetCameraValueInt(camhandle, "Height", 1080); //画像のWxHをセット
+    status = KYFG_SetCameraValueFloat(camhandle, "AcquisitionFrameRate", 1000.00);
     status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "PixelFormat", "Mono8");
 
     status = KYFG_StreamCreateAndAlloc(camhandle, &streamhandle, cyclebuffersize, 0);//Cyclic frame bufferのStreamの設定

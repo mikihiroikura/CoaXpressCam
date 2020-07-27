@@ -13,6 +13,8 @@
 #include <KYFGLib.h>
 #include <KYFGcppLib.h>
 #include <clserkyi.h>
+#include <vector>
+#include <opencv2/opencv.hpp>
 
 #pragma comment(lib,"clserkyi_vc141.lib")
 #pragma comment(lib,"KYFGLib.lib")
@@ -28,13 +30,18 @@ private:
 	static int status;
 	static int pcie_device_num;
 	static int cam_detect_cnt;
+	static int cycle_buffer_size;
 	FGHANDLE fg_handle;
 	CAMHANDLE cam_handle;
 	STREAM_HANDLE stream_handle;
 
+	
+	
+
 public:
 	kayacoaxpress();
 	~kayacoaxpress();
+	void params_all_print();
 
 	void connect(int id);
 	void disconnect();
@@ -49,8 +56,8 @@ public:
 	int getParam(const paramTypeCamera::paramInt& pT);
 	float getParam(const paramTypeCamera::paramFloat& pT);
 
-
-
-
 	void kayacoaxpressMessage(std::string str);
+
+	
 };
+
