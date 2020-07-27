@@ -53,6 +53,7 @@ void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
 kayacoaxpress::kayacoaxpress() : Camera(CAM_WIDTH, CAM_HEIGHT, CAM_FPS)
 {
 	//•Ï”‚Ì‰Šú‰»
+	gain = "x1";
 	stream_handle = 0;
 	cv::Mat in_img = cv::Mat(CAM_HEIGHT, CAM_WIDTH, CV_8UC1, cv::Scalar::all(255));
 	for (size_t i = 0; i < kayacoaxpress::cycle_buffer_size; i++)
@@ -85,7 +86,7 @@ void kayacoaxpress::parameter_all_print()
 	kayacoaxpressMessage("Width : " + std::to_string(width));
 	kayacoaxpressMessage("Height : " + std::to_string(height));
 	kayacoaxpressMessage("Fps : " + std::to_string(fps));
-	kayacoaxpressMessage("Gain : " + std::to_string(gain));
+	kayacoaxpressMessage("Gain : " + std::string(gain));
 }
 
 //ŒÂ•ÊƒJƒƒ‰Ú‘±
@@ -182,12 +183,37 @@ void kayacoaxpress::setParam(const paramTypeCamera::paramFloat& pT, const float 
 		}
 		KYFG_SetCameraValueInt(cam_handle, "AcquisitionFrameRate", fps);
 		break;
-	case paramTypeCamera::paramFloat::GAIN:
-		gain = param;
-		KYFG_SetCameraValueInt(cam_handle, "Gain", gain);
-		break;
 	default:
 		break;
+	}
+}
+
+void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::Gain &pT)
+{
+	if (pT == paramTypeKAYACoaXpress::Gain::x1)
+	{
+		gain = "x1";
+		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "Gain", "x1");
+	}
+	else if (pT == paramTypeKAYACoaXpress::Gain::x2)
+	{
+		gain = "x2";
+		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "Gain", "x2");
+	}
+	else if (pT == paramTypeKAYACoaXpress::Gain::x4)
+	{
+		gain = "x4";
+		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "Gain", "x4");
+	}
+	else if (pT == paramTypeKAYACoaXpress::Gain::x8)
+	{
+		gain = "x8";
+		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "Gain", "x8");
+	}
+	else
+	{
+		gain = "x1";
+		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "Gain", "x1");
 	}
 }
 
@@ -213,9 +239,6 @@ float kayacoaxpress::getParam(const paramTypeCamera::paramFloat& pT)
 	{
 	case paramTypeCamera::paramFloat::FPS:
 		tmp = fps;
-		break;
-	case paramTypeCamera::paramFloat::GAIN:
-		tmp = gain;
 		break;
 	}
 	return tmp;
