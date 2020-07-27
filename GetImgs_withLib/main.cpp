@@ -14,6 +14,7 @@ int main() {
 
 	kayacoaxpress cam;
 	cam.connect(0);
+	cam.parameter_all_print();
 	cam.start();
 
 	while (true)

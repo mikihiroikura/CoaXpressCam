@@ -41,7 +41,7 @@ private:
 public:
 	kayacoaxpress();
 	~kayacoaxpress();
-	void params_all_print();
+	void parameter_all_print();
 
 	void connect(int id);
 	void disconnect();

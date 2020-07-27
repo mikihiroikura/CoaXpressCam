@@ -77,10 +77,10 @@ kayacoaxpress::kayacoaxpress() : Camera(CAM_WIDTH, CAM_HEIGHT, CAM_FPS)
 kayacoaxpress::~kayacoaxpress()
 {
 	status = KYFG_Close(fg_handle);
-	kayacoaxpressMessage("\nFrame Grabber Board Closed.");
+	kayacoaxpressMessage("Frame Grabber Board Closed.");
 }
 
-void kayacoaxpress::params_all_print()
+void kayacoaxpress::parameter_all_print()
 {
 	kayacoaxpressMessage("Width : " + std::to_string(width));
 	kayacoaxpressMessage("Height : " + std::to_string(height));
@@ -108,8 +108,10 @@ void kayacoaxpress::connect(int id)
 
 void kayacoaxpress::disconnect()
 {
+	std::cout << std::endl;
 	KYFG_CameraClose(cam_handle);//カメラを閉じる
 	status = KYFG_Close(fg_handle);//ボードを閉じる
+	kayacoaxpressMessage("Camera disconnected.");
 }
 
 //パラメタ設定後，撮像開始
@@ -132,22 +134,91 @@ void kayacoaxpress::captureFrame(void* data)
 
 void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int param)
 {
-
+	switch (pT)
+	{
+	case paramTypeCamera::paramInt::WIDTH:
+		if (KYFG_GetCameraValueInt(cam_handle, "WidthMax") >= param&& param%64==0) width = param;
+		else if (param % 64 != 0)
+		{
+			kayacoaxpressMessage(" WIDTH : 64の倍数を満たしていないので入力値以下の最大値に設定します");
+			width = param/64*64;
+		}
+		else
+		{
+			kayacoaxpressMessage(" WIDTH : Max以上の設定値を与えているのでMaxに設定します");
+			width = KYFG_GetCameraValueInt(cam_handle, "WidthMax");
+		}
+		KYFG_SetCameraValueInt(cam_handle, "Width", width);
+		break;
+	case paramTypeCamera::paramInt::HEIGHT:
+		if (KYFG_GetCameraValueInt(cam_handle, "HeightMax") >= param && param % 8 == 0) height = param;
+		else if (param % 8 != 0)
+		{
+			kayacoaxpressMessage(" HEIGHT : 8の倍数を満たしていないので入力値以下の最大値に設定します");
+			height = param / 8 * 8;
+		}
+		else
+		{
+			kayacoaxpressMessage(" HEIGHT : Max以上の設定値を与えているのでMaxに設定します");
+			height = KYFG_GetCameraValueInt(cam_handle, "HeightMax");
+		}
+		KYFG_SetCameraValueInt(cam_handle, "Height", height);
+		break;
+	default:
+		break;
+	}
 }
 
 void kayacoaxpress::setParam(const paramTypeCamera::paramFloat& pT, const float param)
 {
-
+	switch (pT)
+	{
+	case paramTypeCamera::paramFloat::FPS:
+		if (KYFG_GetCameraValueFloat(cam_handle, "pFrameRateRegMax") >= param) fps = param;
+		else
+		{
+			kayacoaxpressMessage(" FPS : Max以上の設定値を与えているのでMaxに設定します");
+			fps = 1087.0;
+		}
+		KYFG_SetCameraValueInt(cam_handle, "AcquisitionFrameRate", fps);
+		break;
+	case paramTypeCamera::paramFloat::GAIN:
+		gain = param;
+		KYFG_SetCameraValueInt(cam_handle, "Gain", gain);
+		break;
+	default:
+		break;
+	}
 }
 
 int kayacoaxpress::getParam(const paramTypeCamera::paramInt& pT)
 {
-	return 0;
+	int tmp=0;
+	switch (pT)
+	{
+	case paramTypeCamera::paramInt::WIDTH:
+		tmp = width;
+		break;
+	case paramTypeCamera::paramInt::HEIGHT:
+		tmp = height;
+		break;
+	}
+	return tmp;
 }
 
 float kayacoaxpress::getParam(const paramTypeCamera::paramFloat& pT)
 {
-	return 0;
+	float tmp=0;
+	switch (pT)
+	{
+	case paramTypeCamera::paramFloat::FPS:
+		tmp = fps;
+		break;
+	case paramTypeCamera::paramFloat::GAIN:
+		tmp = gain;
+		break;
+	}
+	return tmp;
 }
 
 void kayacoaxpress::kayacoaxpressMessage(std::string str)
