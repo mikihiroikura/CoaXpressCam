@@ -17,8 +17,6 @@ int main() {
 	int offsetx = 0;
 	int offsety = 0;
 
-	cv::Mat in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255));
-
 	kayacoaxpress cam;
 	cam.connect(0);
 	//ƒpƒ‰ƒ[ƒ^‚Ìİ’è
@@ -29,6 +27,9 @@ int main() {
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetX, offsetx);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);
 	cam.parameter_all_print();
+
+	cv::Mat in_img = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC1, cv::Scalar::all(255));
+
 	cam.start();
 
 	while (true)

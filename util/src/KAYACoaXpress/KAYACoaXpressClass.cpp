@@ -95,17 +95,13 @@ void kayacoaxpress::connect(int id)
 {
 	//カメラ接続
 	status = KYFG_CameraOpen2(cam_handle, NULL);
-	if (status != FGSTATUS_OK) std::runtime_error("Camera cannot be opened.");
+	if (status != FGSTATUS_OK) kayacoaxpressMessage("Camera cannot be opened.");
 
 	//カメラパラメータの設定
 	KYFG_SetCameraValueInt(cam_handle, "Width", CAM_WIDTH);
 	KYFG_SetCameraValueInt(cam_handle, "Height", CAM_HEIGHT);
 	KYFG_SetCameraValueFloat(cam_handle, "AcquisitionFrameRate", CAM_FPS);
 	KYFG_SetCameraValueEnum_ByValueName(cam_handle, "PixelFormat", "Mono8");
-
-	//Callback関数のセット
-	status = KYFG_CameraCallbackRegister(cam_handle, Stream_callback_func, 0);
-	status = KYFG_StreamCreateAndAlloc(cam_handle, &stream_handle, cycle_buffer_size, 0);//Cyclic frame bufferのStreamの設定
 }
 
 void kayacoaxpress::disconnect()
@@ -119,12 +115,19 @@ void kayacoaxpress::disconnect()
 //パラメタ設定後，Cycle_bufferを確立して撮像開始
 void kayacoaxpress::start()
 {
+	//Callback関数のセット
+	status = KYFG_CameraCallbackRegister(cam_handle, Stream_callback_func, 0);
+	status = KYFG_StreamCreateAndAlloc(cam_handle, &stream_handle, cycle_buffer_size, 0);//Cyclic frame bufferのStreamの設定
+
+	//Bufferのセット
 	cv::Mat in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255));
 	for (size_t i = 0; i < kayacoaxpress::cycle_buffer_size; i++)
 	{
 		cycle_buffer_imgs.push_back(in_img.clone());
 	}
-	KYFG_CameraStart(cam_handle, stream_handle, 0);//カメラの動作開始，Framesを0にすると連続して画像を取り続ける
+
+	//カメラの動作開始，Framesを0にすると連続して画像を取り続ける
+	KYFG_CameraStart(cam_handle, stream_handle, 0);
 }
 
 void kayacoaxpress::stop()
