@@ -11,9 +11,10 @@
 
 int main() {
 	//カメラパラメータ
-	int width = 600;
-	int height = 400;
+	int width = 1920;
+	int height = 1080;
 	float fps = 1000.0;
+	float exposuretime = 912.0;
 	int offsetx = 0;
 	int offsety = 0;
 
@@ -23,11 +24,15 @@ int main() {
 	cam.setParam(paramTypeCamera::paramInt::WIDTH, width);
 	cam.setParam(paramTypeCamera::paramInt::HEIGHT, height);
 	cam.setParam(paramTypeCamera::paramFloat::FPS, fps);
+	cam.setParam(paramTypeKAYACoaXpress::paramFloat::ExposureTime, exposuretime);
 	cam.setParam(paramTypeKAYACoaXpress::Gain::x1);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::CycleBufferSize, 256);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetX, offsetx);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);
 	cam.parameter_all_print();
+	//cam.parameter_all_print_debug();
+
+	//デバッグ用
 
 	cv::Mat in_img = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC1, cv::Scalar::all(255));
 

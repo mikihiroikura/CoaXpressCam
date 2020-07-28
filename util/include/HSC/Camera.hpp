@@ -138,6 +138,11 @@ namespace paramTypeKAYACoaXpress
 		OffsetY = 5,
 		CycleBufferSize = 6
 	};
+
+	enum class paramFloat
+	{
+		ExposureTime = 7
+	};
 };
 
 

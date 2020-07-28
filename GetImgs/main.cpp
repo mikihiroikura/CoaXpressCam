@@ -140,12 +140,13 @@ int main() {
 
 	//カメラの動作設定
     status = KYFG_CameraCallbackRegister(camhandle, Stream_callback_func2, 0); //Callback関数をセット
-    int param = 1900;
+    int param = 600;
     if (param % 64 != 0) param = param / 64 * 64;
     status = KYFG_SetCameraValueInt(camhandle, "Width", param);
     int64_t c = KYFG_GetCameraValueInt(camhandle, "Width");
     KYFG_SetCameraValueInt(camhandle, "Height", 1080); //画像のWxHをセット
-    status = KYFG_SetCameraValueFloat(camhandle, "AcquisitionFrameRate", 1000.00);
+    //status = KYFG_SetCameraValueFloat(camhandle, "AcquisitionFrameRate", 1000.00);
+    float fps = KYFG_GetCameraValueFloat(camhandle, "AcquisitionFrameRate");
     status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "PixelFormat", "Mono8");
 
     double d = KYFG_GetCameraValueEnum(camhandle, "Gain");
@@ -157,6 +158,10 @@ int main() {
     int64_t w = KYFG_GetCameraValueInt(camhandle, "OffsetX");
     status = KYFG_SetCameraValueInt(camhandle, "OffsetX", 0);
     a = KYFG_GetCameraValueInt(camhandle, "OffsetXMax");
+
+    float x = KYFG_GetCameraValueFloat(camhandle, "ExposureTime");
+    float g = KYFG_GetCameraValueFloat(camhandle, "pExposureTimeRegMax");
+    status = KYFG_SetCameraValueFloat(camhandle, "ExposureTime", 912);
 
     status = KYFG_StreamCreateAndAlloc(camhandle, &streamhandle, cyclebuffersize, 0);//Cyclic frame bufferのStreamの設定
 

@@ -38,12 +38,14 @@ private:
 	const char* gain;
 	static int offsetx;
 	static int offsety;
+	static float exposuretime;
 	
 
 public:
 	kayacoaxpress();
 	~kayacoaxpress();
 	void parameter_all_print();
+	void parameter_all_print_debug();
 
 	void connect(int id);
 	void disconnect();
@@ -57,6 +59,7 @@ public:
 	void setParam(const paramTypeCamera::paramFloat& pT, const float param);
 	void setParam(const paramTypeKAYACoaXpress::Gain& pT);
 	void setParam(const paramTypeKAYACoaXpress::paramInt& pT, const int param);
+	void setParam(const paramTypeKAYACoaXpress::paramFloat& pT, const float param);
 
 	int getParam(const paramTypeCamera::paramInt& pT);
 	float getParam(const paramTypeCamera::paramFloat& pT);

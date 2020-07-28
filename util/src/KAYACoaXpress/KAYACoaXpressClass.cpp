@@ -16,6 +16,7 @@ int kayacoaxpress::cam_detect_cnt = 0;
 int kayacoaxpress::cycle_buffer_size = 20;
 int kayacoaxpress::offsetx = 0;
 int kayacoaxpress::offsety = 0;
+float kayacoaxpress::exposuretime = 912;
 
 static std::vector<cv::Mat> cycle_buffer_imgs;
 
@@ -88,6 +89,19 @@ void kayacoaxpress::parameter_all_print()
 	kayacoaxpressMessage("Gain : " + std::string(gain));
 	kayacoaxpressMessage("OffsetX : " + std::to_string(offsetx));
 	kayacoaxpressMessage("OffsetY : " + std::to_string(offsety));
+	kayacoaxpressMessage("ExposureTime : " + std::to_string(exposuretime));
+	kayacoaxpressMessage("CycleBufferSize : " + std::to_string(cycle_buffer_size));
+}
+
+void kayacoaxpress::parameter_all_print_debug()
+{
+	kayacoaxpressMessage("Width : " + std::to_string(KYFG_GetCameraValueInt(cam_handle, "Width")));
+	kayacoaxpressMessage("Height : " + std::to_string(KYFG_GetCameraValueInt(cam_handle, "Height")));
+	kayacoaxpressMessage("Fps : " + std::to_string(KYFG_GetCameraValueFloat(cam_handle, "AcquisitionFrameRate")));
+	kayacoaxpressMessage("Gain : " + std::to_string(KYFG_GetCameraValueEnum(cam_handle, "Gain")));
+	kayacoaxpressMessage("OffsetX : " + std::to_string(KYFG_GetCameraValueInt(cam_handle, "OffsetX")));
+	kayacoaxpressMessage("OffsetY : " + std::to_string(KYFG_GetCameraValueInt(cam_handle, "OffsetY")));
+	kayacoaxpressMessage("ExposureTime : " + std::to_string(KYFG_GetCameraValueFloat(cam_handle, "ExposureTime")));
 	kayacoaxpressMessage("CycleBufferSize : " + std::to_string(cycle_buffer_size));
 }
 
@@ -160,7 +174,9 @@ void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int para
 			width = KYFG_GetCameraValueInt(cam_handle, "WidthMax");
 		}
 		KYFG_SetCameraValueInt(cam_handle, "Width", width);
-		offsetx = (CAM_WIDTH - width) / 2;
+		offsetx = KYFG_GetCameraValueInt(cam_handle, "OffsetX");
+		fps = KYFG_GetCameraValueFloat(cam_handle, "AcquisitionFrameRate");
+		exposuretime = KYFG_GetCameraValueFloat(cam_handle, "ExposureTime");
 		break;
 	case paramTypeCamera::paramInt::HEIGHT:
 		if (KYFG_GetCameraValueInt(cam_handle, "HeightMax") >= param && param % 8 == 0) height = param;
@@ -175,7 +191,9 @@ void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int para
 			height = KYFG_GetCameraValueInt(cam_handle, "HeightMax");
 		}
 		KYFG_SetCameraValueInt(cam_handle, "Height", height);
-		offsety = (CAM_HEIGHT - height) / 2;
+		offsety = KYFG_GetCameraValueInt(cam_handle, "OffsetY");
+		fps = KYFG_GetCameraValueFloat(cam_handle, "AcquisitionFrameRate");
+		exposuretime = KYFG_GetCameraValueFloat(cam_handle, "ExposureTime");
 		break;
 	default:
 		break;
@@ -193,7 +211,7 @@ void kayacoaxpress::setParam(const paramTypeCamera::paramFloat& pT, const float 
 			kayacoaxpressMessage(" FPS : MaxˆÈã‚Ìİ’è’l‚ğ—^‚¦‚Ä‚¢‚é‚Ì‚ÅMax‚Éİ’è‚µ‚Ü‚·");
 			fps = 1087.0;
 		}
-		KYFG_SetCameraValueInt(cam_handle, "AcquisitionFrameRate", fps);
+		KYFG_SetCameraValueFloat(cam_handle, "AcquisitionFrameRate", fps);
 		break;
 	default:
 		break;
@@ -263,6 +281,24 @@ void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::paramInt& pT, const i
 		break;
 	case paramTypeKAYACoaXpress::paramInt::CycleBufferSize:
 		kayacoaxpress::cycle_buffer_size = param;
+		break;
+	default:
+		break;
+	}
+}
+
+void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::paramFloat& pT, const float param)
+{
+	switch (pT)
+	{
+	case paramTypeKAYACoaXpress::paramFloat::ExposureTime:
+		if (KYFG_GetCameraValueInt(cam_handle, "pExposureTimeRegMax") >= param) exposuretime = param;
+		else
+		{
+			kayacoaxpressMessage(" EXPOSURETIME : MaxˆÈã‚Ìİ’è’l‚ğ—^‚¦‚Ä‚¢‚é‚Ì‚ÅMax‚Éİ’è‚µ‚Ü‚·");
+			exposuretime = KYFG_GetCameraValueInt(cam_handle, "pExposureTimeRegMax");
+		}
+		KYFG_SetCameraValueFloat(cam_handle, "ExposureTime", exposuretime);
 		break;
 	default:
 		break;
