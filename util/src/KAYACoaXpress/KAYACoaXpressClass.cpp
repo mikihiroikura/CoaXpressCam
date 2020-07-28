@@ -88,6 +88,7 @@ void kayacoaxpress::parameter_all_print()
 	kayacoaxpressMessage("Gain : " + std::string(gain));
 	kayacoaxpressMessage("OffsetX : " + std::to_string(offsetx));
 	kayacoaxpressMessage("OffsetY : " + std::to_string(offsety));
+	kayacoaxpressMessage("CycleBufferSize : " + std::to_string(cycle_buffer_size));
 }
 
 //ŒÂ•ÊƒJƒƒ‰Ú‘±
@@ -259,6 +260,9 @@ void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::paramInt& pT, const i
 			offsety = KYFG_GetCameraValueInt(cam_handle, "OffsetYMax");
 		}
 		KYFG_SetCameraValueInt(cam_handle, "OffsetY", offsety);
+		break;
+	case paramTypeKAYACoaXpress::paramInt::CycleBufferSize:
+		kayacoaxpress::cycle_buffer_size = param;
 		break;
 	default:
 		break;

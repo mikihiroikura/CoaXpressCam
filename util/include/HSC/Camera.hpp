@@ -135,7 +135,8 @@ namespace paramTypeKAYACoaXpress
 	enum class paramInt
 	{
 		OffsetX = 4,
-		OffsetY = 5
+		OffsetY = 5,
+		CycleBufferSize = 6
 	};
 };
 

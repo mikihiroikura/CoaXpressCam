@@ -24,6 +24,7 @@ int main() {
 	cam.setParam(paramTypeCamera::paramInt::HEIGHT, height);
 	cam.setParam(paramTypeCamera::paramFloat::FPS, fps);
 	cam.setParam(paramTypeKAYACoaXpress::Gain::x1);
+	//cam.setParam(paramTypeKAYACoaXpress::paramInt::CycleBufferSize, 256);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetX, offsetx);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);
 	cam.parameter_all_print();
