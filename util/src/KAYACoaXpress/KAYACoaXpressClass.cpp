@@ -14,6 +14,8 @@ int kayacoaxpress::status = 0;
 int kayacoaxpress::pcie_device_num = 0;
 int kayacoaxpress::cam_detect_cnt = 0;
 int kayacoaxpress::cycle_buffer_size = 20;
+int kayacoaxpress::offsetx = 0;
+int kayacoaxpress::offsety = 0;
 
 static std::vector<cv::Mat> cycle_buffer_imgs;
 
@@ -54,13 +56,10 @@ kayacoaxpress::kayacoaxpress() : Camera(CAM_WIDTH, CAM_HEIGHT, CAM_FPS)
 {
 	//変数の初期化
 	gain = "x1";
+	offsetx = 0;
+	offsety = 0;
 	stream_handle = 0;
-	cv::Mat in_img = cv::Mat(CAM_HEIGHT, CAM_WIDTH, CV_8UC1, cv::Scalar::all(255));
-	for (size_t i = 0; i < kayacoaxpress::cycle_buffer_size; i++)
-	{
-		cycle_buffer_imgs.push_back(in_img.clone());
-	}
-
+	
 	//FGBの認識，接続
 	status = KY_DeviceScan(&pcie_device_num);
 	if (pcie_device_num == 0) std::runtime_error("No FGB device presrent.");
@@ -87,6 +86,8 @@ void kayacoaxpress::parameter_all_print()
 	kayacoaxpressMessage("Height : " + std::to_string(height));
 	kayacoaxpressMessage("Fps : " + std::to_string(fps));
 	kayacoaxpressMessage("Gain : " + std::string(gain));
+	kayacoaxpressMessage("OffsetX : " + std::to_string(offsetx));
+	kayacoaxpressMessage("OffsetY : " + std::to_string(offsety));
 }
 
 //個別カメラ接続
@@ -115,9 +116,14 @@ void kayacoaxpress::disconnect()
 	kayacoaxpressMessage("Camera disconnected.");
 }
 
-//パラメタ設定後，撮像開始
+//パラメタ設定後，Cycle_bufferを確立して撮像開始
 void kayacoaxpress::start()
 {
+	cv::Mat in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255));
+	for (size_t i = 0; i < kayacoaxpress::cycle_buffer_size; i++)
+	{
+		cycle_buffer_imgs.push_back(in_img.clone());
+	}
 	KYFG_CameraStart(cam_handle, stream_handle, 0);//カメラの動作開始，Framesを0にすると連続して画像を取り続ける
 }
 
@@ -150,6 +156,7 @@ void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int para
 			width = KYFG_GetCameraValueInt(cam_handle, "WidthMax");
 		}
 		KYFG_SetCameraValueInt(cam_handle, "Width", width);
+		offsetx = (CAM_WIDTH - width) / 2;
 		break;
 	case paramTypeCamera::paramInt::HEIGHT:
 		if (KYFG_GetCameraValueInt(cam_handle, "HeightMax") >= param && param % 8 == 0) height = param;
@@ -164,6 +171,7 @@ void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int para
 			height = KYFG_GetCameraValueInt(cam_handle, "HeightMax");
 		}
 		KYFG_SetCameraValueInt(cam_handle, "Height", height);
+		offsety = (CAM_HEIGHT - height) / 2;
 		break;
 	default:
 		break;
@@ -214,6 +222,43 @@ void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::Gain &pT)
 	{
 		gain = "x1";
 		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "Gain", "x1");
+	}
+}
+
+void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::paramInt& pT, const int param)
+{
+	switch (pT)
+	{
+	case paramTypeKAYACoaXpress::paramInt::OffsetX:
+		if (KYFG_GetCameraValueInt(cam_handle, "OffsetXMax") >= param && param % 32 == 0) offsetx = param;
+		else if (param % 32 != 0)
+		{
+			kayacoaxpressMessage(" OFFSETX : 32の倍数を満たしていないので入力値以下の最大値に設定します");
+			offsetx = param / 32 * 32;
+		}
+		else
+		{
+			kayacoaxpressMessage(" OFFSETX : Max以上の設定値を与えているのでMaxに設定します");
+			offsetx = KYFG_GetCameraValueInt(cam_handle, "OffsetXMax");
+		}
+		KYFG_SetCameraValueInt(cam_handle, "OffsetX", offsetx);
+		break;
+	case paramTypeKAYACoaXpress::paramInt::OffsetY:
+		if (KYFG_GetCameraValueInt(cam_handle, "OffsetYMax") >= param && param % 4 == 0) offsety = param;
+		else if (param % 4 != 0)
+		{
+			kayacoaxpressMessage(" OFFSETY : 4の倍数を満たしていないので入力値以下の最大値に設定します");
+			offsetx = param / 4 * 4;
+		}
+		else
+		{
+			kayacoaxpressMessage(" OFFSETY : Max以上の設定値を与えているのでMaxに設定します");
+			offsety = KYFG_GetCameraValueInt(cam_handle, "OffsetYMax");
+		}
+		KYFG_SetCameraValueInt(cam_handle, "OffsetY", offsety);
+		break;
+	default:
+		break;
 	}
 }
 

@@ -10,10 +10,24 @@
 #pragma comment(lib,"KAYACoaXpressLib" LIB_EXT)
 
 int main() {
-	cv::Mat in_img = cv::Mat(1080, 1920, CV_8UC1, cv::Scalar::all(255));
+	//カメラパラメータ
+	int width = 600;
+	int height = 400;
+	float fps = 1000.0;
+	int offsetx = 0;
+	int offsety = 0;
+
+	cv::Mat in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255));
 
 	kayacoaxpress cam;
 	cam.connect(0);
+	//パラメータの設定
+	cam.setParam(paramTypeCamera::paramInt::WIDTH, width);
+	cam.setParam(paramTypeCamera::paramInt::HEIGHT, height);
+	cam.setParam(paramTypeCamera::paramFloat::FPS, fps);
+	cam.setParam(paramTypeKAYACoaXpress::Gain::x1);
+	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetX, offsetx);
+	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);
 	cam.parameter_all_print();
 	cam.start();
 

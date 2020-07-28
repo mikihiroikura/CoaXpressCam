@@ -36,6 +36,8 @@ private:
 	STREAM_HANDLE stream_handle;
 
 	const char* gain;
+	static int offsetx;
+	static int offsety;
 	
 
 public:
@@ -54,6 +56,7 @@ public:
 	void setParam(const paramTypeCamera::paramInt& pT, const int param);
 	void setParam(const paramTypeCamera::paramFloat& pT, const float param);
 	void setParam(const paramTypeKAYACoaXpress::Gain& pT);
+	void setParam(const paramTypeKAYACoaXpress::paramInt& pT, const int param);
 
 	int getParam(const paramTypeCamera::paramInt& pT);
 	float getParam(const paramTypeCamera::paramFloat& pT);

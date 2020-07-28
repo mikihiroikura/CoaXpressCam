@@ -131,6 +131,12 @@ namespace paramTypeKAYACoaXpress
 		x4 = 2,
 		x8 = 3
 	};
+
+	enum class paramInt
+	{
+		OffsetX = 4,
+		OffsetY = 5
+	};
 };
 
 

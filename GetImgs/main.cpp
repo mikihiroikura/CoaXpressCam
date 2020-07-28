@@ -154,6 +154,10 @@ int main() {
 
     int64_t a = KYFG_GetCameraValueInt(camhandle, "WidthMax");
 
+    int64_t w = KYFG_GetCameraValueInt(camhandle, "OffsetX");
+    status = KYFG_SetCameraValueInt(camhandle, "OffsetX", 0);
+    a = KYFG_GetCameraValueInt(camhandle, "OffsetXMax");
+
     status = KYFG_StreamCreateAndAlloc(camhandle, &streamhandle, cyclebuffersize, 0);//Cyclic frame bufferのStreamの設定
 
     status = KYFG_CameraStart(camhandle, streamhandle, 0);//カメラの動作開始，Framesを0にすると連続して画像を取り続ける
