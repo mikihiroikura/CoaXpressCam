@@ -332,6 +332,44 @@ float kayacoaxpress::getParam(const paramTypeCamera::paramFloat& pT)
 	return tmp;
 }
 
+const char* kayacoaxpress::getParam(const paramTypeKAYACoaXpress::Gain& pT)
+{
+	const char* tmp;
+	tmp = gain;
+	return tmp;
+}
+
+int kayacoaxpress::getParam(const paramTypeKAYACoaXpress::paramInt& pT)
+{
+	int tmp = 0;
+	switch (pT)
+	{
+	case paramTypeKAYACoaXpress::paramInt::CycleBufferSize:
+		tmp = cycle_buffer_size;
+		break;
+	case paramTypeKAYACoaXpress::paramInt::OffsetX:
+		tmp = offsetx;
+		break;
+	case paramTypeKAYACoaXpress::paramInt::OffsetY:
+		tmp = offsety;
+		break;
+	}
+	return tmp;
+}
+
+float kayacoaxpress::getParam(const paramTypeKAYACoaXpress::paramFloat& pT)
+{
+	float tmp = 0;
+	switch (pT)
+	{
+	case paramTypeKAYACoaXpress::paramFloat::ExposureTime:
+		tmp = exposuretime;
+		break;
+	}
+	return tmp;
+}
+
+
 void kayacoaxpress::kayacoaxpressMessage(std::string str)
 {
 	std::cout << "[KAYACoaXpress] " << str << std::endl;

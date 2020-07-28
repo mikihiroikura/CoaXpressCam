@@ -63,6 +63,9 @@ public:
 
 	int getParam(const paramTypeCamera::paramInt& pT);
 	float getParam(const paramTypeCamera::paramFloat& pT);
+	const char* getParam(const paramTypeKAYACoaXpress::Gain& pT);
+	int getParam(const paramTypeKAYACoaXpress::paramInt& pT);
+	float getParam(const paramTypeKAYACoaXpress::paramFloat& pT);
 
 	void kayacoaxpressMessage(std::string str);
 
