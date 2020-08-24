@@ -11,7 +11,7 @@ int main() {
 	char buf[256];
 
 	mbed.Connect("COM4", 115200, 8, NOPARITY, 0, 0, 0, 5000, 20000);
-	mbed.Send("240\r\n");
+	mbed.Send("R,500,0\r\n");
 	mbed.Read_CRLF(buf, 256);
 	printf(buf);
 
