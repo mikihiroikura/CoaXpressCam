@@ -11,12 +11,12 @@ int main() {
 	char buf[256];
 
 	mbed.Connect("COM4", 115200, 8, NOPARITY, 0, 0, 0, 5000, 20000);
-	mbed.Send("R,500,0\r\n");
+	mbed.Send("R,800,0,108000\r\n");
 	mbed.Read_CRLF(buf, 256);
 	printf(buf);
 
-	int num = atoi(buf);
-	printf("%d\n", num);
+	/*int num = atoi(buf);
+	printf("%d\n", num);*/
 
 	return 0;
 }

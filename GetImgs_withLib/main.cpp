@@ -1,4 +1,6 @@
 #include <HSC/KAYACoaXpressClass.hpp>
+#include <vector>
+#include <time.h>
 
 #ifdef _DEBUG
 #define LIB_EXT "d.lib"
@@ -8,6 +10,8 @@
 
 
 #pragma comment(lib,"KAYACoaXpressLib" LIB_EXT)
+#pragma warning(disable:4996)
+using namespace std;
 
 int main() {
 	//カメラパラメータ
@@ -44,6 +48,15 @@ int main() {
 
 	cv::Mat in_img = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC1, cv::Scalar::all(255));
 
+	//画像保存用のVector用意
+	vector<cv::Mat> save_img;
+	string save_dir = "D:\\Github_output\\CoaXpressCam\\GetImgs_WithLib\\";
+	time_t now = time(NULL);
+	struct tm* pnow = localtime(&now);
+	char buff[128] = "";
+	sprintf(buff, "%04d%02d%02d%02d%02d", 1900 + pnow->tm_year, 1 + pnow->tm_mon, pnow->tm_mday, pnow->tm_hour, pnow->tm_min);
+	save_dir += string(buff);
+
 	cam.start();
 
 	while (true)
@@ -52,9 +65,21 @@ int main() {
 		cv::imshow("imgs", in_img);
 		int key = cv::waitKey(1);
 		if (key == 'q') break;
+		else if (key == 'p')
+		{
+			save_img.push_back(in_img.clone());
+		}
 	}
 
 	cam.stop();
 	cam.disconnect();
+
+	//画像の保存
+	for (int i = 0; i < save_img.size(); i++)
+	{
+		sprintf(buff, "img%03d.png", i);
+		string img_name = string(buff);
+		cv::imwrite(save_dir + img_name, save_img[i]);
+	}
 	return 0;
 }
