@@ -116,7 +116,6 @@ void kayacoaxpress::connect(int id)
 	KYFG_SetCameraValueInt(cam_handle, "Width", CAM_WIDTH);
 	KYFG_SetCameraValueInt(cam_handle, "Height", CAM_HEIGHT);
 	KYFG_SetCameraValueFloat(cam_handle, "AcquisitionFrameRate", CAM_FPS);
-	KYFG_SetCameraValueEnum_ByValueName(cam_handle, "PixelFormat", "Mono8");
 }
 
 void kayacoaxpress::disconnect()
@@ -300,6 +299,21 @@ void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::paramFloat& pT, const
 		}
 		KYFG_SetCameraValueFloat(cam_handle, "ExposureTime", exposuretime);
 		break;
+	default:
+		break;
+	}
+}
+
+void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::CaptureType& pt)
+{
+	switch (pt)
+	{
+	case paramTypeKAYACoaXpress::CaptureType::Monocro8Grab:
+		format = "Mono8";
+		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "PixelFormat", "Mono8");
+	case paramTypeKAYACoaXpress::CaptureType::BayerGRGrab:
+		format = "BayerGR8";
+		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "PixelFormat", "BayerGR8");
 	default:
 		break;
 	}

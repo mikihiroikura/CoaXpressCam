@@ -143,6 +143,19 @@ namespace paramTypeKAYACoaXpress
 	{
 		ExposureTime = 7
 	};
+	enum class CaptureType
+	{
+		ColorGrab = 0,
+		MonocroGrab = 1,
+		BayerGrab = 2,
+		Monocro8Grab = 3,
+		ColorBGRGrab = 4,
+
+		BayerBGGrab = 5,
+		BayerGBGrab = 6,
+		BayerRGGrab = 7,
+		BayerGRGrab = 8,
+	};
 };
 
 

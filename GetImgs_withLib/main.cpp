@@ -30,6 +30,7 @@ int main() {
 	cam.setParam(paramTypeCamera::paramFloat::FPS, fps);
 	cam.setParam(paramTypeKAYACoaXpress::paramFloat::ExposureTime, exposuretime);
 	cam.setParam(paramTypeKAYACoaXpress::Gain::x1);
+	cam.setParam(paramTypeKAYACoaXpress::CaptureType::Monocro8Grab);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::CycleBufferSize, 256);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetX, offsetx);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);

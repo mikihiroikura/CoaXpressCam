@@ -9,12 +9,15 @@ using namespace std;
 int main() {
 	RS232c mbed;
 	char buf[256];
+	char message[256] = "R,100,150,10,\r";
 
 	mbed.Connect("COM4", 115200, 8, NOPARITY, 0, 0, 0, 5000, 20000);
-	mbed.Send("R,800,0,108000\r\n");
-	mbed.Read_CRLF(buf, 256);
-	printf(buf);
-
+	mbed.Send(message);
+	//int sizes = sizeof(message) / sizeof(message[0]);
+	/*while (1) {
+		mbed.Read_CRLF(buf, 256);
+		printf(buf);
+	}*/
 	/*int num = atoi(buf);
 	printf("%d\n", num);*/
 
