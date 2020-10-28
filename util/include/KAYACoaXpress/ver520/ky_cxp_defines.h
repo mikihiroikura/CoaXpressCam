@@ -67,14 +67,6 @@ typedef enum _video_data_subtype
 	DATA_SUBTYPE_YCBCR_444		= 0x03, // Transmission order Y, Cb, Cr
 }VIDEO_DATA_SUBTYPE;
 
-//The pixel format code is formed as shown in Table 24 of JIIA CXP document. Note that the value 0x0000 is reserved for “raw” data that does not match any defined format, such as user-specific formats.
-typedef struct _video_pixelif
-{
-	VIDEO_DATA_WIDTH	data_width   : 4;	// Data Width
-	VIDEO_DATA_SUBTYPE	data_subtype : 4;	// Sub-type
-	VIDEO_DATA_TYPE		data_type	 : 8;	// Data Type
-}VIDEO_PIXELIF;
-
 // Specification of multi-tapped images
 typedef enum _tapg
 {

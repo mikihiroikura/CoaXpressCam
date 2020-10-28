@@ -52,7 +52,7 @@
 extern "C" {
 #endif
 
-typedef unsigned char KYBOOL;
+typedef uint8_t  KYBOOL;
 #define KYTRUE   1
 #define KYFALSE  0
 
@@ -90,13 +90,13 @@ typedef enum _KY_DATA_TYPE
 
 // DEPRECATED definition
 #ifdef __GNUC__
-#define KY_DEPRECATED(func, text) func __attribute__ ((deprecated))
+#define KY_DEPRECATED(name, comment) func __attribute__ ((deprecated(name)))
 #elif defined(_MSC_VER)
-#define KY_DEPRECATED(func, text) __declspec(deprecated(text)) func
+#define KY_DEPRECATED(name, comment) __declspec(deprecated(comment)) name
 // TODO: specify KYFG_CALLCONV for ALL external API
 #else
-#pragma message("WARNING: You need to implement DEPRECATED for this compiler")
-#define DEPRECATED(func) func
+#pragma message("WARNING: You need to implement KY_DEPRECATED for this compiler")
+#define KY_DEPRECATED(name, text) name
 #endif
 
 #ifndef _WIN32
@@ -123,17 +123,52 @@ typedef enum _KY_DATA_TYPE
 #define VARIABLE_IS_NOT_USED
 #endif
 
-KY_DEPRECATED(KY_API const char* KY_DeviceDisplayName(int index), "Function 'KY_DeviceDisplayName' is deprecated, please use function 'KY_DeviceInfo' to retrieve device name");
+KY_API const char* KY_DeviceDisplayName(int index);
 
+#ifdef __cplusplus
+static const uint8_t KY_DEVICE_STREAM_GRABBER = 0x1;
+static const uint8_t KY_DEVICE_STREAM_GENERATOR = 0x2;
+#else
+#define KY_DEVICE_STREAM_GRABBER 0x1
+#define KY_DEVICE_STREAM_GENERATOR 0x2
+#endif
+
+typedef enum _KY_DEVICE_PROTOCOL
+{
+	KY_DEVICE_PROTOCOL_CoaXPress = 0,
+	KY_DEVICE_PROTOCOL_CLHS = 1,
+	KY_DEVICE_PROTOCOL_GigE = 2,
+	KY_DEVICE_PROTOCOL_Mixed = 0xFF,
+	KY_DEVICE_PROTOCOL_Unknown = 0xFFFF
+}KY_DEVICE_PROTOCOL;
+
+#pragma pack(push, 1)
 typedef struct _KY_DEVICE_INFO
 {
-    char     szDeviceDisplayName[256];
+	// Version of this structure
+	// on input must be no greater than 3, value 0 is treated as 1
+	// on output indicates version supporeted by current library
+	uint32_t version;
+
+	// since version 1:
+	char     szDeviceDisplayName[256];
     int      nBus;
     int      nSlot;
     int      nFunction;
     uint32_t DevicePID;
     KYBOOL   isVirtual;
+
+	// following fields will be set by library only if caller initializes 'version' with number 2 (or more in library versions)
+	// since version 2:
+	uint8_t  m_Flags;   // mask KY_DEVICE_STREAM_GRABBER indicates device that supports grabbing (input streams). 
+	                    // mask KY_DEVICE_STREAM_GENERATOR indicates device that supports generation (output streams).
+
+	// since version 3:
+	KY_DEVICE_PROTOCOL m_Protocol;
+
+	// following fields will be set by future library versions and only if caller initializes 'version' with number 4 or more (when supported by library)
 }KY_DEVICE_INFO;
+#pragma pack(pop)
 
 static const char* VARIABLE_IS_NOT_USED DEVICE_NEWINTERRUPTSOURCE_SUPPORTED = "FW_Dma_Capable_NewInterruptSource_Imp";
 static const char* VARIABLE_IS_NOT_USED DEVICE_QUEUED_BUFFERS_SUPPORTED = "FW_Dma_Capable_QueuedBuffers_Imp";

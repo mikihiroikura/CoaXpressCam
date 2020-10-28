@@ -135,18 +135,6 @@ KYCLSER_API int32_t KYCLSER_CALLCONV FUNCPREFIX( clCallbackUnregister(hSerRef se
  */
 KYCLSER_API int32_t KYCLSER_CALLCONV FUNCPREFIX( clSerialComPortInitEx(CAMHANDLE camHandle, uint32_t serialIndex, uint32_t* portNumber, const char* displayName, hSerRef* serialRefPtr) );
 
-/**
- * @fn		clSerialComPortInit
- * @brief	Creates a Virtual COM Port with specified port number and display name.
- * @params	[in] hSerRef serialRef - Handle to serial port.
- *          [in,out] uint32_t* portNumber - COM port number to open. If portNumber is 0 then next available port number will be assigned.
- *                                          Returns actual port number assigned to COM port.
- *          [in] const char* displayName - COM port display name. In case of NULL a generic name will be assigned.
- * @return	CL_ERR_NO_ERR
- *          CL_ERR_INVALID_REFERENCE
- *          CL_ERR_INVALID_PTR
- */
-KYCLSER_DEPRECATED(KYCLSER_API int32_t KYCLSER_CALLCONV FUNCPREFIX( clSerialComPortInit(hSerRef serialRef, uint32_t* portNumber, const char* displayName) ) , "Function 'clSerialComPortInit' is a deprecated, please use function 'clSerialComPortInitEx'");
 
 /**
  * @fn		clSerialComPortClose
