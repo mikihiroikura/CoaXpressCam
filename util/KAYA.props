@@ -3,8 +3,8 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <IncludePath>C:\Program Files\KAYA Instruments\Vision Point\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files\KAYA Instruments\Vision Point\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)util\include\KAYACoaXpress;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)util\lib\KAYACoaXpress;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
