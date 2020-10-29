@@ -19,6 +19,8 @@ int kayacoaxpress::offsety = 0;
 float kayacoaxpress::exposuretime = 912;
 
 static std::vector<cv::Mat> cycle_buffer_imgs;
+cv::Mat cvt_img;
+const char* outformat;
 
 
 //Callback関数
@@ -44,7 +46,20 @@ void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
 	{
 		copyingDataFlag = KYTRUE;
 		printf("\rGood callback buffer handle:%X, current index:%d, total frames:%lld        ", streamHandle, buffIndex, totalFrames); //\rは同じ行の先頭に戻ることを意味する
-		memcpy(cycle_buffer_imgs[buffIndex].data, buffData, buffSize);			// copy data to local buffer
+		if (outformat == "Bayer2Color")
+		{
+			memcpy(cvt_img.data, buffData, buffSize);
+			cv::cvtColor(cvt_img, cycle_buffer_imgs[buffIndex], CV_BayerGR2RGB);
+		}
+		else if (outformat == "Bayer2Mono")
+		{
+			memcpy(cvt_img.data, buffData, buffSize);
+			cv::cvtColor(cvt_img, cycle_buffer_imgs[buffIndex], CV_BayerGR2GRAY);
+		}
+		else
+		{
+			memcpy(cycle_buffer_imgs[buffIndex].data, buffData, buffSize);
+		}
 		//... Show Image with data ...
 		//cv::imshow("img", in_img);
 		copyingDataFlag = KYFALSE;
@@ -90,6 +105,8 @@ void kayacoaxpress::parameter_all_print()
 	kayacoaxpressMessage("OffsetX : " + std::to_string(offsetx));
 	kayacoaxpressMessage("OffsetY : " + std::to_string(offsety));
 	kayacoaxpressMessage("ExposureTime : " + std::to_string(exposuretime));
+	kayacoaxpressMessage("PixelFormat : " + std::string(format));
+	kayacoaxpressMessage("OutputFormat : " + std::string(outformat));
 	kayacoaxpressMessage("CycleBufferSize : " + std::to_string(cycle_buffer_size));
 }
 
@@ -129,16 +146,20 @@ void kayacoaxpress::disconnect()
 //パラメタ設定後，Cycle_bufferを確立して撮像開始
 void kayacoaxpress::start()
 {
-	//Callback関数のセット
-	status = KYFG_CameraCallbackRegister(cam_handle, Stream_callback_func, 0);
-	status = KYFG_StreamCreateAndAlloc(cam_handle, &stream_handle, cycle_buffer_size, 0);//Cyclic frame bufferのStreamの設定
-
 	//Bufferのセット
-	cv::Mat in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255));
+	cv::Mat in_img;
+	if (outformat == "Mono2Mono" || outformat == "Bayer2Mono") { in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255)); }
+	else if (outformat == "Bayer2Color") { in_img = cv::Mat(height, width, CV_8UC3, cv::Scalar::all(255)); }
+	else { in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255)); }
 	for (size_t i = 0; i < kayacoaxpress::cycle_buffer_size; i++)
 	{
 		cycle_buffer_imgs.push_back(in_img.clone());
 	}
+	cvt_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255));
+
+	//Callback関数のセット
+	status = KYFG_CameraCallbackRegister(cam_handle, Stream_callback_func, 0);
+	status = KYFG_StreamCreateAndAlloc(cam_handle, &stream_handle, cycle_buffer_size, 0);//Cyclic frame bufferのStreamの設定
 
 	//カメラの動作開始，Framesを0にすると連続して画像を取り続ける
 	KYFG_CameraStart(cam_handle, stream_handle, 0);
@@ -153,7 +174,14 @@ void kayacoaxpress::captureFrame(void* data)
 {
 	int callno = KYFG_StreamGetFrameIndex(stream_handle)-1;
 	if (callno < 0) callno += kayacoaxpress::cycle_buffer_size;
-	memcpy(data, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle));
+	if (outformat == "Mono2Mono" || outformat == "Bayer2Mono")
+	{
+		memcpy(data, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle));
+	}
+	else
+	{
+		memcpy(data, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle) * 3);
+	}
 }
 
 void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int param)
@@ -311,9 +339,29 @@ void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::CaptureType& pt)
 	case paramTypeKAYACoaXpress::CaptureType::Monocro8Grab:
 		format = "Mono8";
 		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "PixelFormat", "Mono8");
+		break;
 	case paramTypeKAYACoaXpress::CaptureType::BayerGRGrab:
 		format = "BayerGR8";
 		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "PixelFormat", "BayerGR8");
+		break;
+	default:
+		break;
+	}
+}
+
+void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::OutputType& pt)
+{
+	switch (pt)
+	{
+	case paramTypeKAYACoaXpress::OutputType::Mono2Mono:
+		outformat = "Mono2Mono";
+		break;
+	case paramTypeKAYACoaXpress::OutputType::Bayer2Mono:
+		outformat = "Bayer2Mono";
+		break;
+	case paramTypeKAYACoaXpress::OutputType::Bayer2Color:
+		outformat = "Bayer2Color";
+		break;
 	default:
 		break;
 	}

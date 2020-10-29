@@ -62,6 +62,7 @@ public:
 	void setParam(const paramTypeKAYACoaXpress::paramInt& pT, const int param);
 	void setParam(const paramTypeKAYACoaXpress::paramFloat& pT, const float param);
 	void setParam(const paramTypeKAYACoaXpress::CaptureType& pt);
+	void setParam(const paramTypeKAYACoaXpress::OutputType& pt);
 
 	int getParam(const paramTypeCamera::paramInt& pT);
 	float getParam(const paramTypeCamera::paramFloat& pT);

@@ -7,8 +7,6 @@
 #include <stdint.h>
 #include <limits.h>
 #include <float.h>
-#include <inttypes.h>
-
 //#ifndef UINT32_MAX // TODO: Check the need for this in CentOS - issue 1446
 //#   define UINT32_MAX  0x00000000ffffffffULL   /* maximum unsigned int32 value */
 //#endif
@@ -54,21 +52,21 @@
 extern "C" {
 #endif
 
-typedef uint8_t  KYBOOL;
+typedef unsigned char KYBOOL;
 #define KYTRUE   1
 #define KYFALSE  0
 
 // Parameter camera type
 typedef enum _cam_property_type
 {
-    PROPERTY_TYPE_UNKNOWN   = -1,
-    PROPERTY_TYPE_INT       = 0x00,
-    PROPERTY_TYPE_BOOL      = 0x01,
-    PROPERTY_TYPE_STRING    = 0x02,
-    PROPERTY_TYPE_FLOAT     = 0x03,
-    PROPERTY_TYPE_ENUM      = 0x04,
-    PROPERTY_TYPE_COMMAND   = 0x05,
-    PROPERTY_TYPE_REGISTER  = 0x06
+    PROPERTY_TYPE_UNKNOWN	= -1,
+    PROPERTY_TYPE_INT		= 0x00,
+    PROPERTY_TYPE_BOOL		= 0x01,
+	PROPERTY_TYPE_STRING	= 0x02,
+	PROPERTY_TYPE_FLOAT		= 0x03,
+	PROPERTY_TYPE_ENUM		= 0x04,
+    PROPERTY_TYPE_COMMAND	= 0x05,
+	PROPERTY_TYPE_REGISTER	= 0x06
 }KY_CAM_PROPERTY_TYPE;
 
 
@@ -92,16 +90,17 @@ typedef enum _KY_DATA_TYPE
 
 // DEPRECATED definition
 #ifdef __GNUC__
-#define KY_DEPRECATED(name, comment) name __attribute__ ((deprecated(comment)))
+#define KY_DEPRECATED(func, text) func __attribute__ ((deprecated))
 #elif defined(_MSC_VER)
-#define KY_DEPRECATED(name, comment) __declspec(deprecated(comment)) name
+#define KY_DEPRECATED(func, text) __declspec(deprecated(text)) func
 // TODO: specify KYFG_CALLCONV for ALL external API
 #else
-#pragma message("WARNING: You need to implement KY_DEPRECATED for this compiler")
-#define KY_DEPRECATED(name, text) name
+#pragma message("WARNING: You need to implement DEPRECATED for this compiler")
+#define DEPRECATED(func) func
 #endif
 
 #ifndef _WIN32
+    #include <inttypes.h>
 /**/
     #define GCC_VERSION (__GNUC__ * 10000 \
                      + __GNUC_MINOR__ * 100 \
@@ -110,11 +109,11 @@ typedef enum _KY_DATA_TYPE
     #if(GCC_VERSION <= 40407)
         #define nullptr 0
     #endif
-    // We do NOT want to #define 'nullptr' as 0 when compiling in Visual Studio 2012, which does support keyword 'nullptr'
-    // (as well as other C++ 11 features), but still #defines __cplusplus as 199711L
-    #if __cplusplus < 201103L
-        #define nullptr 0
-    #endif
+	// We do NOT want to #define 'nullptr' as 0 when compiling in Visual Studio 2012, which does support keyword 'nullptr' 
+	// (as well as other C++ 11 features), but still #defines __cplusplus as 199711L
+	#if __cplusplus < 201103L
+		#define nullptr 0
+	#endif
 
 #endif
 
@@ -124,52 +123,17 @@ typedef enum _KY_DATA_TYPE
 #define VARIABLE_IS_NOT_USED
 #endif
 
-KY_API const char* KY_DeviceDisplayName(int index);
+KY_DEPRECATED(KY_API const char* KY_DeviceDisplayName(int index), "Function 'KY_DeviceDisplayName' is deprecated, please use function 'KY_DeviceInfo' to retrieve device name");
 
-#ifdef __cplusplus
-static const uint8_t KY_DEVICE_STREAM_GRABBER = 0x1;
-static const uint8_t KY_DEVICE_STREAM_GENERATOR = 0x2;
-#else
-#define KY_DEVICE_STREAM_GRABBER 0x1
-#define KY_DEVICE_STREAM_GENERATOR 0x2
-#endif
-
-typedef enum _KY_DEVICE_PROTOCOL
-{
-    KY_DEVICE_PROTOCOL_CoaXPress = 0,
-    KY_DEVICE_PROTOCOL_CLHS = 1,
-    KY_DEVICE_PROTOCOL_GigE = 2,
-    KY_DEVICE_PROTOCOL_Mixed = 0xFF,
-    KY_DEVICE_PROTOCOL_Unknown = 0xFFFF
-}KY_DEVICE_PROTOCOL;
-
-#pragma pack(push, 1)
 typedef struct _KY_DEVICE_INFO
 {
-    // Version of this structure
-    // on input must be no greater than 3, value 0 is treated as 1
-    // on output indicates version supporeted by current library
-    uint32_t version;
-
-    // since version 1:
     char     szDeviceDisplayName[256];
     int      nBus;
     int      nSlot;
     int      nFunction;
     uint32_t DevicePID;
     KYBOOL   isVirtual;
-
-    // following fields will be set by library only if caller initializes 'version' with number 2 (or more in library versions)
-    // since version 2:
-    uint8_t  m_Flags;   // mask KY_DEVICE_STREAM_GRABBER indicates device that supports grabbing (input streams).
-                        // mask KY_DEVICE_STREAM_GENERATOR indicates device that supports generation (output streams).
-
-    // since version 3:
-    KY_DEVICE_PROTOCOL m_Protocol;
-
-    // following fields will be set by future library versions and only if caller initializes 'version' with number 4 or more (when supported by library)
 }KY_DEVICE_INFO;
-#pragma pack(pop)
 
 static const char* VARIABLE_IS_NOT_USED DEVICE_NEWINTERRUPTSOURCE_SUPPORTED = "FW_Dma_Capable_NewInterruptSource_Imp";
 static const char* VARIABLE_IS_NOT_USED DEVICE_QUEUED_BUFFERS_SUPPORTED = "FW_Dma_Capable_QueuedBuffers_Imp";

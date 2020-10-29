@@ -30,7 +30,8 @@ int main() {
 	cam.setParam(paramTypeCamera::paramFloat::FPS, fps);
 	cam.setParam(paramTypeKAYACoaXpress::paramFloat::ExposureTime, exposuretime);
 	cam.setParam(paramTypeKAYACoaXpress::Gain::x1);
-	cam.setParam(paramTypeKAYACoaXpress::CaptureType::Monocro8Grab);
+	cam.setParam(paramTypeKAYACoaXpress::CaptureType::BayerGRGrab);
+	cam.setParam(paramTypeKAYACoaXpress::OutputType::Bayer2Color);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::CycleBufferSize, 256);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetX, offsetx);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);
@@ -47,7 +48,7 @@ int main() {
 	float g = cam.getParam(paramTypeCamera::paramFloat::FPS);
 	float h = cam.getParam(paramTypeKAYACoaXpress::paramFloat::ExposureTime);*/
 
-	cv::Mat in_img = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC1, cv::Scalar::all(255));
+	cv::Mat in_img = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC3, cv::Scalar::all(255));
 
 	//‰æ‘œ•Û‘¶—p‚ÌVector—pˆÓ
 	vector<cv::Mat> save_img;
