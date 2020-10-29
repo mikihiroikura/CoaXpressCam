@@ -69,6 +69,7 @@ public:
 	const char* getParam(const paramTypeKAYACoaXpress::Gain& pT);
 	int getParam(const paramTypeKAYACoaXpress::paramInt& pT);
 	float getParam(const paramTypeKAYACoaXpress::paramFloat& pT);
+	const char* getParam(const paramTypeKAYACoaXpress::OutputType& pT);
 
 	void kayacoaxpressMessage(std::string str);
 

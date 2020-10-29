@@ -431,6 +431,13 @@ float kayacoaxpress::getParam(const paramTypeKAYACoaXpress::paramFloat& pT)
 	return tmp;
 }
 
+const char* kayacoaxpress::getParam(const paramTypeKAYACoaXpress::OutputType& pT)
+{
+	const char* tmp;
+	tmp = outformat;
+	return tmp;
+}
+
 
 void kayacoaxpress::kayacoaxpressMessage(std::string str)
 {

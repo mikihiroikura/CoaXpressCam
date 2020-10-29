@@ -48,7 +48,21 @@ int main() {
 	float g = cam.getParam(paramTypeCamera::paramFloat::FPS);
 	float h = cam.getParam(paramTypeKAYACoaXpress::paramFloat::ExposureTime);*/
 
-	cv::Mat in_img = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC3, cv::Scalar::all(255));
+	const char* outformat = cam.getParam(paramTypeKAYACoaXpress::OutputType::Bayer2Color);
+	cv::Mat in_img;
+	if (outformat == "Mono2Mono" || outformat=="Bayer2Mono")
+	{
+		in_img = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC1, cv::Scalar::all(255));
+	}
+	else if(outformat=="Bayer2Color")
+	{
+		in_img = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC3, cv::Scalar::all(255));
+	}
+	else
+	{
+		in_img = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC1, cv::Scalar::all(255));
+	}
+	
 
 	//‰æ‘œ•Û‘¶—p‚ÌVector—pˆÓ
 	vector<cv::Mat> save_img;
