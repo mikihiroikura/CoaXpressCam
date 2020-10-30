@@ -150,9 +150,9 @@ int main() {
    /* int param = 600;
     if (param % 64 != 0) param = param / 64 * 64;*/
     
-    status = KYFG_SetCameraValueInt(camhandle, "Width", 800);
+    status = KYFG_SetCameraValueInt(camhandle, "Width", 1920);
     int64_t c = KYFG_GetCameraValueInt(camhandle, "Width");
-    KYFG_SetCameraValueInt(camhandle, "Height", 800); //画像のWxHをセット
+    KYFG_SetCameraValueInt(camhandle, "Height", 1080); //画像のWxHをセット
     //status = KYFG_SetCameraValueFloat(camhandle, "AcquisitionFrameRate", 1000.00);
     float fps = KYFG_GetCameraValueFloat(camhandle, "AcquisitionFrameRate");
     status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "PixelFormat", "BayerGR8");

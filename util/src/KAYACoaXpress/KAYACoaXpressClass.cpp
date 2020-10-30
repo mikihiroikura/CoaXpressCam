@@ -20,7 +20,7 @@ float kayacoaxpress::exposuretime = 912;
 
 static std::vector<cv::Mat> cycle_buffer_imgs;
 cv::Mat cvt_img;
-const char* outformat;
+const char* format_callback;
 
 
 //Callback関数
@@ -46,15 +46,14 @@ void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
 	{
 		copyingDataFlag = KYTRUE;
 		printf("\rGood callback buffer handle:%X, current index:%d, total frames:%lld        ", streamHandle, buffIndex, totalFrames); //\rは同じ行の先頭に戻ることを意味する
-		if (outformat == "Bayer2Color")
+		if (format_callback == "BayerGR8")
 		{
 			memcpy(cvt_img.data, buffData, buffSize);
-			cv::cvtColor(cvt_img, cycle_buffer_imgs[buffIndex], CV_BayerGR2RGB);
+			cv::cvtColor(cvt_img, cycle_buffer_imgs[buffIndex], CV_BGR2RGB);
 		}
-		else if (outformat == "Bayer2Mono")
+		else if (format_callback == "Mono8")
 		{
-			memcpy(cvt_img.data, buffData, buffSize);
-			cv::cvtColor(cvt_img, cycle_buffer_imgs[buffIndex], CV_BayerGR2GRAY);
+			memcpy(cycle_buffer_imgs[buffIndex].data, buffData, buffSize);
 		}
 		else
 		{
@@ -106,7 +105,6 @@ void kayacoaxpress::parameter_all_print()
 	kayacoaxpressMessage("OffsetY : " + std::to_string(offsety));
 	kayacoaxpressMessage("ExposureTime : " + std::to_string(exposuretime));
 	kayacoaxpressMessage("PixelFormat : " + std::string(format));
-	kayacoaxpressMessage("OutputFormat : " + std::string(outformat));
 	kayacoaxpressMessage("CycleBufferSize : " + std::to_string(cycle_buffer_size));
 }
 
@@ -148,14 +146,14 @@ void kayacoaxpress::start()
 {
 	//Bufferのセット
 	cv::Mat in_img;
-	if (outformat == "Mono2Mono" || outformat == "Bayer2Mono") { in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255)); }
-	else if (outformat == "Bayer2Color") { in_img = cv::Mat(height, width, CV_8UC3, cv::Scalar::all(255)); }
+	if (format == "Mono8") { in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255)); }
+	else if (format == "BayerGR8") { in_img = cv::Mat(height, width, CV_8UC3, cv::Scalar::all(255)); }
 	else { in_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255)); }
 	for (size_t i = 0; i < kayacoaxpress::cycle_buffer_size; i++)
 	{
 		cycle_buffer_imgs.push_back(in_img.clone());
 	}
-	cvt_img = cv::Mat(height, width, CV_8UC1, cv::Scalar::all(255));
+	cvt_img = cv::Mat(height, width, CV_8UC3, cv::Scalar::all(255));
 
 	//Callback関数のセット
 	status = KYFG_CameraCallbackRegister(cam_handle, Stream_callback_func, 0);
@@ -174,14 +172,7 @@ void kayacoaxpress::captureFrame(void* data)
 {
 	int callno = KYFG_StreamGetFrameIndex(stream_handle)-1;
 	if (callno < 0) callno += kayacoaxpress::cycle_buffer_size;
-	if (outformat == "Mono2Mono" || outformat == "Bayer2Mono")
-	{
-		memcpy(data, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle));
-	}
-	else
-	{
-		memcpy(data, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle) * 3);
-	}
+	memcpy(data, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle));
 }
 
 void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int param)
@@ -339,32 +330,17 @@ void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::CaptureType& pt)
 	case paramTypeKAYACoaXpress::CaptureType::Monocro8Grab:
 		format = "Mono8";
 		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "PixelFormat", "Mono8");
+		KYFG_SetGrabberValueEnum_ByValueName(fg_handle, "PixelFormat", "Mono8");
 		break;
 	case paramTypeKAYACoaXpress::CaptureType::BayerGRGrab:
 		format = "BayerGR8";
 		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "PixelFormat", "BayerGR8");
+		KYFG_SetGrabberValueEnum_ByValueName(fg_handle, "PixelFormat", "RGB8");
 		break;
 	default:
 		break;
 	}
-}
-
-void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::OutputType& pt)
-{
-	switch (pt)
-	{
-	case paramTypeKAYACoaXpress::OutputType::Mono2Mono:
-		outformat = "Mono2Mono";
-		break;
-	case paramTypeKAYACoaXpress::OutputType::Bayer2Mono:
-		outformat = "Bayer2Mono";
-		break;
-	case paramTypeKAYACoaXpress::OutputType::Bayer2Color:
-		outformat = "Bayer2Color";
-		break;
-	default:
-		break;
-	}
+	format_callback = format;
 }
 
 int kayacoaxpress::getParam(const paramTypeCamera::paramInt& pT)
@@ -431,10 +407,10 @@ float kayacoaxpress::getParam(const paramTypeKAYACoaXpress::paramFloat& pT)
 	return tmp;
 }
 
-const char* kayacoaxpress::getParam(const paramTypeKAYACoaXpress::OutputType& pT)
+const char* kayacoaxpress::getParam(const paramTypeKAYACoaXpress::CaptureType& pT)
 {
 	const char* tmp;
-	tmp = outformat;
+	tmp = format;
 	return tmp;
 }
 
