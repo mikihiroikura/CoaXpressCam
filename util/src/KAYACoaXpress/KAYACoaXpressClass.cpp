@@ -444,3 +444,8 @@ void kayacoaxpress::kayacoaxpressMessage(std::string str)
 	std::cout << "[KAYACoaXpress] " << str << std::endl;
 }
 
+void kayacoaxpress::debug_func()
+{
+	KYFG_SetGrabberValueEnum_ByValueName(fg_handle, "PixelFormat", "RGB8");
+}
+

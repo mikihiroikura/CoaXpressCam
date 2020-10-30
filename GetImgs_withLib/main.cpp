@@ -14,7 +14,7 @@
 using namespace std;
 
 int main() {
-	//ƒJƒƒ‰ƒpƒ‰ƒ[ƒ^
+	//ã‚«ãƒ¡ãƒ©ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
 	int width = 1920;
 	int height = 1080;
 	float fps = 1000.0;
@@ -24,7 +24,7 @@ int main() {
 
 	kayacoaxpress cam;
 	cam.connect(0);
-	//ƒpƒ‰ƒ[ƒ^‚Ìİ’è
+	//ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®è¨­å®š
 	cam.setParam(paramTypeCamera::paramInt::WIDTH, width);
 	cam.setParam(paramTypeCamera::paramInt::HEIGHT, height);
 	cam.setParam(paramTypeCamera::paramFloat::FPS, fps);
@@ -38,7 +38,7 @@ int main() {
 	cam.parameter_all_print();
 	//cam.parameter_all_print_debug();
 
-	//ƒfƒoƒbƒO—p
+	//ãƒ‡ãƒãƒƒã‚°ç”¨
 	/*const char* a = cam.getParam(paramTypeKAYACoaXpress::Gain::x1);
 	int b = cam.getParam(paramTypeCamera::paramInt::HEIGHT);
 	int c = cam.getParam(paramTypeCamera::paramInt::WIDTH);
@@ -64,7 +64,7 @@ int main() {
 	}
 	
 
-	//‰æ‘œ•Û‘¶—p‚ÌVector—pˆÓ
+	//ç”»åƒä¿å­˜ç”¨ã®Vectorç”¨æ„
 	vector<cv::Mat> save_img;
 	string save_dir = "D:\\Github_output\\CoaXpressCam\\GetImgs_WithLib\\";
 	time_t now = time(NULL);
@@ -90,7 +90,7 @@ int main() {
 	cam.stop();
 	cam.disconnect();
 
-	//‰æ‘œ‚Ì•Û‘¶
+	//ç”»åƒã®ä¿å­˜
 	for (int i = 0; i < save_img.size(); i++)
 	{
 		sprintf(buff, "img%03d.png", i);

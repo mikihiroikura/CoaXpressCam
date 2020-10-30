@@ -17,6 +17,7 @@ cv::Mat in_img;
 LARGE_INTEGER freq, start, end2;
 double logtime;
 vector<cv::Mat> cycle_buffer_imgs;
+cv::Mat cvtimg = cv::Mat(1080, 1920, CV_8UC3, cv::Scalar::all(255));
 
 //コールバック関数
 void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
@@ -60,7 +61,8 @@ void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
 //コールバック関数
 void Stream_callback_func2(void* userContext, STREAM_HANDLE streamHandle)
 {
-    
+    //時間計測開始
+    QueryPerformanceCounter(&start);
 
     static KYBOOL copyingDataFlag = KYFALSE;
     long long totalFrames = 0, buffSize = 0;
@@ -82,10 +84,15 @@ void Stream_callback_func2(void* userContext, STREAM_HANDLE streamHandle)
     {
         copyingDataFlag = KYTRUE;
         printf("\rGood callback buffer handle:%X, current index:%d, total frames:%lld        ", streamHandle, buffIndex, totalFrames); //\rは同じ行の先頭に戻ることを意味する
-        memcpy(cycle_buffer_imgs[buffIndex].data, buffData, buffSize);			// copy data to local buffer
+        memcpy(cvtimg.data, (uchar*)buffData, buffSize);
+        cv::cvtColor(cvtimg, cycle_buffer_imgs[buffIndex], CV_BGR2RGB);
+
         //... Show Image with data ...
         //cv::imshow("img", in_img);
         copyingDataFlag = KYFALSE;
+        //時間計測終了
+        QueryPerformanceCounter(&end2);
+        logtime = (double)(end2.QuadPart - start.QuadPart) / freq.QuadPart;
         printf(" logtime: %.6f", logtime);
     }
 }
@@ -106,7 +113,7 @@ int main() {
 
     //in_imgの初期化
     int cyclebuffersize = 20;
-    in_img = cv::Mat(1080, 1920, CV_8UC1, cv::Scalar::all(255));
+    in_img = cv::Mat(1080, 1920, CV_8UC3, cv::Scalar::all(255));
     for (size_t i = 0; i < cyclebuffersize; i++)
     {
         cycle_buffer_imgs.push_back(in_img.clone());
@@ -140,18 +147,20 @@ int main() {
 
 	//カメラの動作設定
     status = KYFG_CameraCallbackRegister(camhandle, Stream_callback_func2, 0); //Callback関数をセット
-    int param = 600;
-    if (param % 64 != 0) param = param / 64 * 64;
-    status = KYFG_SetCameraValueInt(camhandle, "Width", param);
+   /* int param = 600;
+    if (param % 64 != 0) param = param / 64 * 64;*/
+    
+    status = KYFG_SetCameraValueInt(camhandle, "Width", 800);
     int64_t c = KYFG_GetCameraValueInt(camhandle, "Width");
-    KYFG_SetCameraValueInt(camhandle, "Height", 1080); //画像のWxHをセット
+    KYFG_SetCameraValueInt(camhandle, "Height", 800); //画像のWxHをセット
     //status = KYFG_SetCameraValueFloat(camhandle, "AcquisitionFrameRate", 1000.00);
     float fps = KYFG_GetCameraValueFloat(camhandle, "AcquisitionFrameRate");
-    status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "PixelFormat", "Mono8");
+    status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "PixelFormat", "BayerGR8");
+    status = KYFG_SetGrabberValueEnum_ByValueName(handle, "PixelFormat", "RGB8");
 
     double d = KYFG_GetCameraValueEnum(camhandle, "Gain");
-    status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "Gain", "x2");
-    d = KYFG_GetCameraValueEnum(camhandle, "Gain");
+    /*status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "Gain", "x2");
+    d = KYFG_GetCameraValueEnum(camhandle, "Gain");*/
 
     int64_t a = KYFG_GetCameraValueInt(camhandle, "WidthMax");
 
@@ -170,8 +179,7 @@ int main() {
 
     while (1)
     {
-        //時間計測開始
-        QueryPerformanceCounter(&start);
+        //cv::cvtColor(cycle_buffer_imgs[0], cvtimg, CV_BGR2RGB);
         cv::imshow("img", cycle_buffer_imgs[0]);
         int key = cv::waitKey(1);
         if (key == 'q')break;
@@ -179,9 +187,6 @@ int main() {
         {
             save_img.push_back(cycle_buffer_imgs[0].clone());
         }
-        //時間計測終了
-        QueryPerformanceCounter(&end2);
-        logtime = (double)(end2.QuadPart - start.QuadPart) / freq.QuadPart;
     }
 
     //画像の保存

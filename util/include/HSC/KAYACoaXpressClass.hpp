@@ -73,6 +73,7 @@ public:
 
 	void kayacoaxpressMessage(std::string str);
 
+	void debug_func();
 	
 };
 
