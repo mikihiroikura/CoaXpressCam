@@ -156,12 +156,6 @@ namespace paramTypeKAYACoaXpress
 		BayerRGGrab = 7,
 		BayerGRGrab = 8,
 	};
-	enum class OutputType
-	{
-		Mono2Mono = 0,
-		Bayer2Mono = 1,
-		Bayer2Color = 2
-	};
 };
 
 
