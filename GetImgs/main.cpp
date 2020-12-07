@@ -101,7 +101,7 @@ int main() {
 	KY_SOFTWARE_VERSION ver;
 	KY_DEVICE_INFO device_info;
 	FGHANDLE handle;
-	CAMHANDLE camhandle;
+	CAMHANDLE camhandle[2];
     STREAM_HANDLE streamhandle = 0;
 
 	int status;
@@ -141,40 +141,41 @@ int main() {
 		cout << i << " " << KY_DeviceDisplayName(i) << endl;
 	}
 	handle = KYFG_Open(0);//0番目のデバイスを開く
-	camdetectcnt = 1;
-	status = KYFG_UpdateCameraList(handle, &camhandle, &camdetectcnt);//ボード接続しているカメラすべて認識
-	status = KYFG_CameraOpen2(camhandle, NULL);//カメラを開く
+	camdetectcnt = 2;
+    int selcamnum = 0;
+	status = KYFG_UpdateCameraList(handle, &camhandle[0], &camdetectcnt);//ボード接続しているカメラすべて認識
+	status = KYFG_CameraOpen2(camhandle[selcamnum], NULL);//カメラを開く
 
 	//カメラの動作設定
-    status = KYFG_CameraCallbackRegister(camhandle, Stream_callback_func2, 0); //Callback関数をセット
+    status = KYFG_CameraCallbackRegister(camhandle[selcamnum], Stream_callback_func2, 0); //Callback関数をセット
    /* int param = 600;
     if (param % 64 != 0) param = param / 64 * 64;*/
     
-    status = KYFG_SetCameraValueInt(camhandle, "Width", 1920);
-    int64_t c = KYFG_GetCameraValueInt(camhandle, "Width");
-    KYFG_SetCameraValueInt(camhandle, "Height", 1080); //画像のWxHをセット
+    status = KYFG_SetCameraValueInt(camhandle[selcamnum], "Width", 1920);
+    int64_t c = KYFG_GetCameraValueInt(camhandle[selcamnum], "Width");
+    KYFG_SetCameraValueInt(camhandle[selcamnum], "Height", 1080); //画像のWxHをセット
     //status = KYFG_SetCameraValueFloat(camhandle, "AcquisitionFrameRate", 1000.00);
-    float fps = KYFG_GetCameraValueFloat(camhandle, "AcquisitionFrameRate");
-    status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "PixelFormat", "BayerGR8");
+    float fps = KYFG_GetCameraValueFloat(camhandle[selcamnum], "AcquisitionFrameRate");
+    status = KYFG_SetCameraValueEnum_ByValueName(camhandle[selcamnum], "PixelFormat", "BayerGR8");
     status = KYFG_SetGrabberValueEnum_ByValueName(handle, "PixelFormat", "RGB8");
 
-    double d = KYFG_GetCameraValueEnum(camhandle, "Gain");
+    double d = KYFG_GetCameraValueEnum(camhandle[selcamnum], "Gain");
     /*status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "Gain", "x2");
     d = KYFG_GetCameraValueEnum(camhandle, "Gain");*/
 
-    int64_t a = KYFG_GetCameraValueInt(camhandle, "WidthMax");
+    int64_t a = KYFG_GetCameraValueInt(camhandle[selcamnum], "WidthMax");
 
-    int64_t w = KYFG_GetCameraValueInt(camhandle, "OffsetX");
-    status = KYFG_SetCameraValueInt(camhandle, "OffsetX", 0);
-    a = KYFG_GetCameraValueInt(camhandle, "OffsetXMax");
+    int64_t w = KYFG_GetCameraValueInt(camhandle[selcamnum], "OffsetX");
+    status = KYFG_SetCameraValueInt(camhandle[selcamnum], "OffsetX", 0);
+    a = KYFG_GetCameraValueInt(camhandle[selcamnum], "OffsetXMax");
 
-    float x = KYFG_GetCameraValueFloat(camhandle, "ExposureTime");
-    float g = KYFG_GetCameraValueFloat(camhandle, "pExposureTimeRegMax");
-    status = KYFG_SetCameraValueFloat(camhandle, "ExposureTime", 912);
+    float x = KYFG_GetCameraValueFloat(camhandle[selcamnum], "ExposureTime");
+    float g = KYFG_GetCameraValueFloat(camhandle[selcamnum], "pExposureTimeRegMax");
+    status = KYFG_SetCameraValueFloat(camhandle[selcamnum], "ExposureTime", 912);
 
-    status = KYFG_StreamCreateAndAlloc(camhandle, &streamhandle, cyclebuffersize, 0);//Cyclic frame bufferのStreamの設定
+    status = KYFG_StreamCreateAndAlloc(camhandle[selcamnum], &streamhandle, cyclebuffersize, 0);//Cyclic frame bufferのStreamの設定
 
-    status = KYFG_CameraStart(camhandle, streamhandle, 0);//カメラの動作開始，Framesを0にすると連続して画像を取り続ける
+    status = KYFG_CameraStart(camhandle[selcamnum], streamhandle, 0);//カメラの動作開始，Framesを0にすると連続して画像を取り続ける
     //これ以降カメラのLEDが緑になる
 
     while (1)
@@ -199,7 +200,7 @@ int main() {
     }
 
 
-    KYFG_CameraClose(camhandle);//カメラを閉じる
+    KYFG_CameraClose(camhandle[selcamnum]);//カメラを閉じる
 
 	status = KYFG_Close(handle);//ボードを閉じる
 
