@@ -142,7 +142,7 @@ int main() {
 	}
 	handle = KYFG_Open(0);//0番目のデバイスを開く
 	camdetectcnt = 2;
-    int selcamnum = 0;
+    int selcamnum = 1;
 	status = KYFG_UpdateCameraList(handle, &camhandle[0], &camdetectcnt);//ボード接続しているカメラすべて認識
 	status = KYFG_CameraOpen2(camhandle[selcamnum], NULL);//カメラを開く
 
