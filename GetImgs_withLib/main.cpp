@@ -1,6 +1,7 @@
 #include <HSC/KAYACoaXpressClass.hpp>
 #include <vector>
 #include <time.h>
+#include <Windows.h>
 
 #ifdef _DEBUG
 #define LIB_EXT "d.lib"
@@ -13,7 +14,12 @@
 #pragma warning(disable:4996)
 using namespace std;
 
+LARGE_INTEGER freq, start, stop;
+double times;
+
 int main() {
+	if (!QueryPerformanceFrequency(&freq)) { return 0; }// 単位習得
+
 	//カメラパラメータ
 	int width = 896;
 	int height = 896;
@@ -76,7 +82,11 @@ int main() {
 
 	while (true)
 	{
+		QueryPerformanceCounter(&start);
 		cam.captureFrame(in_img.data);
+		QueryPerformanceCounter(&stop);
+		times = (double)(stop.QuadPart - start.QuadPart) / freq.QuadPart;
+		std::cout << "TakePicture() time: " << times << endl;
 		//cv::cvtColor(in_img, out_img, CV_RGB2GRAY);
 		cv::imshow("imgs", in_img);
 		int key = cv::waitKey(1);

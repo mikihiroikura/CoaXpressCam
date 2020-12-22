@@ -21,7 +21,7 @@ float kayacoaxpress::exposuretime = 912;
 static std::vector<cv::Mat> cycle_buffer_imgs;
 cv::Mat cvt_img;
 const char* format_callback;
-
+double fps;
 
 //CallbackŠÖ”
 void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
@@ -45,7 +45,7 @@ void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
 	if (KYFALSE == copyingDataFlag)
 	{
 		copyingDataFlag = KYTRUE;
-		printf("\rGood callback buffer handle:%X, current index:%d, total frames:%lld        ", streamHandle, buffIndex, totalFrames); //\r‚Í“¯‚¶s‚Ìæ“ª‚É–ß‚é‚±‚Æ‚ğˆÓ–¡‚·‚é
+		//printf("\rGood callback buffer handle:%X, current index:%d, total frames:%lld        ", streamHandle, buffIndex, totalFrames); //\r‚Í“¯‚¶s‚Ìæ“ª‚É–ß‚é‚±‚Æ‚ğˆÓ–¡‚·‚é
 		if (format_callback == "BayerGR8")
 		{
 			memcpy(cvt_img.data, buffData, buffSize);
@@ -172,7 +172,7 @@ void kayacoaxpress::captureFrame(void* data)
 {
 	int callno = KYFG_StreamGetFrameIndex(stream_handle)-1;
 	if (callno < 0) callno += kayacoaxpress::cycle_buffer_size;
-	memcpy(data, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle));
+	memcpy(data, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle));	
 }
 
 void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int param)
