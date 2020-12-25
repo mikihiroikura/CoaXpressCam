@@ -29,7 +29,7 @@ int main() {
 	int offsety = 0;
 
 	kayacoaxpress cam;
-	cam.connect(0);
+	cam.connect(1);
 	//パラメータの設定
 	cam.setParam(paramTypeCamera::paramInt::WIDTH, width);
 	cam.setParam(paramTypeCamera::paramInt::HEIGHT, height);

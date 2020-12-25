@@ -83,10 +83,10 @@ kayacoaxpress::kayacoaxpress() : Camera(CAM_WIDTH, CAM_HEIGHT, CAM_FPS)
 		std::cout << i << " " << KY_DeviceDisplayName(i) << std::endl;
 	}
 	fg_handle = KYFG_Open(0);
-	cam_detect_cnt = 1;
+	cam_detect_cnt = 2;
 
 	//カメラ数の確認
-	status = KYFG_UpdateCameraList(fg_handle, &cam_handle, &cam_detect_cnt);//ボード接続しているカメラすべて認識
+	status = KYFG_UpdateCameraList(fg_handle, &allcam_handle[0], &cam_detect_cnt);//ボード接続しているカメラすべて認識
 }
 
 kayacoaxpress::~kayacoaxpress()
@@ -124,6 +124,7 @@ void kayacoaxpress::parameter_all_print_debug()
 void kayacoaxpress::connect(int id)
 {
 	//カメラ接続
+	cam_handle = allcam_handle[id];
 	status = KYFG_CameraOpen2(cam_handle, NULL);
 	if (status != FGSTATUS_OK) kayacoaxpressMessage("Camera cannot be opened.");
 

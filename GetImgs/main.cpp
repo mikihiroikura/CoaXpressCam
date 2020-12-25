@@ -151,7 +151,7 @@ int main() {
    /* int param = 600;
     if (param % 64 != 0) param = param / 64 * 64;*/
     
-    status = KYFG_SetCameraValueInt(camhandle[selcamnum], "Width", 1920);
+    status = KYFG_SetCameraValueInt(camhandle[selcamnum], "Width", 896);
     int64_t c = KYFG_GetCameraValueInt(camhandle[selcamnum], "Width");
     KYFG_SetCameraValueInt(camhandle[selcamnum], "Height", 1080); //‰æ‘œ‚ÌWxH‚ðƒZƒbƒg
     //status = KYFG_SetCameraValueFloat(camhandle, "AcquisitionFrameRate", 1000.00);
@@ -166,7 +166,7 @@ int main() {
     int64_t a = KYFG_GetCameraValueInt(camhandle[selcamnum], "WidthMax");
 
     int64_t w = KYFG_GetCameraValueInt(camhandle[selcamnum], "OffsetX");
-    status = KYFG_SetCameraValueInt(camhandle[selcamnum], "OffsetX", 0);
+    //status = KYFG_SetCameraValueInt(camhandle[selcamnum], "OffsetX", 0);
     a = KYFG_GetCameraValueInt(camhandle[selcamnum], "OffsetXMax");
 
     float x = KYFG_GetCameraValueFloat(camhandle[selcamnum], "ExposureTime");

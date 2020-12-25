@@ -33,6 +33,7 @@ private:
 	static int cycle_buffer_size;
 	FGHANDLE fg_handle;
 	CAMHANDLE cam_handle;
+	CAMHANDLE allcam_handle[2];
 	STREAM_HANDLE stream_handle;
 
 	const char* gain;
