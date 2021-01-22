@@ -40,6 +40,7 @@ int main() {
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::CycleBufferSize, 256);
 	cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetX, offsetx);
 	//cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);
+	cam.setParam(paramTypeKAYACoaXpress::AcquisitionMode::TriggerMode, 1);
 	cam.parameter_all_print();
 	//cam.parameter_all_print_debug();
 

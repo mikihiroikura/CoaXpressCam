@@ -20,6 +20,7 @@ float kayacoaxpress::exposuretime = 912;
 
 static std::vector<cv::Mat> cycle_buffer_imgs;
 cv::Mat cvt_img;
+cv::Mat cvt_img_after;
 const char* format_callback;
 double fps;
 
@@ -174,6 +175,26 @@ void kayacoaxpress::captureFrame(void* data)
 	int callno = KYFG_StreamGetFrameIndex(stream_handle)-1;
 	if (callno < 0) callno += kayacoaxpress::cycle_buffer_size;
 	memcpy(data, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle));	
+	//long long buffSize = 0;
+	//int buffIndex;
+	//void* buffData;
+	//buffSize = KYFG_StreamGetSize(stream_handle);			// get buffer size 1920x1080
+	//buffIndex = KYFG_StreamGetFrameIndex(stream_handle);
+	//buffData = KYFG_StreamGetPtr(stream_handle, buffIndex);		// get pointer of buffer data
+	//if (format_callback == "BayerGR8")
+	//{
+	//	memcpy(cvt_img.data, buffData, buffSize);
+	//	cv::cvtColor(cvt_img, cvt_img_after, CV_BGR2RGB);
+	//	memcpy(data, cvt_img_after.data, buffSize);
+	//}
+	//else if (format_callback == "Mono8")
+	//{
+	//	memcpy(data, buffData, buffSize);
+	//}
+	//else
+	//{
+	//	memcpy(data, buffData, buffSize);
+	//}
 }
 
 void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int param)
@@ -344,6 +365,26 @@ void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::CaptureType& pt)
 	format_callback = format;
 }
 
+void kayacoaxpress::setParam(const paramTypeKAYACoaXpress::AcquisitionMode& pt, int id) {
+	switch (pt)
+	{
+	case paramTypeKAYACoaXpress::AcquisitionMode::EnableAcquisitionFrameRate:
+		acquisition_mode = "ContinuousMode";
+		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "AcquisitionMode", "Continuous");
+		KYFG_SetGrabberValueEnum(fg_handle, "CameraSelector", id);
+		KYFG_SetGrabberValueEnum_ByValueName(fg_handle, "CameraTriggerMode", "Off");
+		break;
+	case paramTypeKAYACoaXpress::AcquisitionMode::TriggerMode:
+		acquisition_mode = "TriggerMode";
+		KYFG_SetCameraValueEnum_ByValueName(cam_handle, "AcquisitionMode", "SingleFrame");
+		KYFG_SetGrabberValueEnum(fg_handle, "CameraSelector", id);
+		KYFG_SetGrabberValueEnum_ByValueName(fg_handle, "CameraTriggerMode", "On");
+		break;
+	default:
+		break;
+	}
+}
+
 int kayacoaxpress::getParam(const paramTypeCamera::paramInt& pT)
 {
 	int tmp=0;
@@ -412,6 +453,12 @@ const char* kayacoaxpress::getParam(const paramTypeKAYACoaXpress::CaptureType& p
 {
 	const char* tmp;
 	tmp = format;
+	return tmp;
+}
+
+const char* kayacoaxpress::getParam(const paramTypeKAYACoaXpress::AcquisitionMode& pT) {
+	const char* tmp;
+	tmp = acquisition_mode;
 	return tmp;
 }
 

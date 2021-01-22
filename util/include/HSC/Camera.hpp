@@ -124,6 +124,12 @@ namespace paramTypeEosens
 
 namespace paramTypeKAYACoaXpress
 {
+	enum class AcquisitionMode
+	{
+		EnableAcquisitionFrameRate = 0,
+		TriggerMode = 1
+	};
+
 	enum class Gain
 	{
 		x1 = 0,

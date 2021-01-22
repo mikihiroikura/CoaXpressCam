@@ -113,7 +113,7 @@ int main() {
 
     //in_imgの初期化
     int cyclebuffersize = 20;
-    in_img = cv::Mat(1080, 1920, CV_8UC3, cv::Scalar::all(255));
+    in_img = cv::Mat(896, 896, CV_8UC3, cv::Scalar::all(255));
     for (size_t i = 0; i < cyclebuffersize; i++)
     {
         cycle_buffer_imgs.push_back(in_img.clone());
@@ -151,9 +151,13 @@ int main() {
    /* int param = 600;
     if (param % 64 != 0) param = param / 64 * 64;*/
     
+    status = KYFG_SetCameraValueEnum_ByValueName(camhandle[selcamnum], "AcquisitionMode", "SingleFrame");
+    status = KYFG_SetGrabberValueEnum(handle, "CameraSelector", 1);
+    status = KYFG_SetGrabberValueEnum_ByValueName(handle, "CameraTriggerMode", "On");
+
     status = KYFG_SetCameraValueInt(camhandle[selcamnum], "Width", 896);
     int64_t c = KYFG_GetCameraValueInt(camhandle[selcamnum], "Width");
-    KYFG_SetCameraValueInt(camhandle[selcamnum], "Height", 1080); //画像のWxHをセット
+    KYFG_SetCameraValueInt(camhandle[selcamnum], "Height", 896); //画像のWxHをセット
     //status = KYFG_SetCameraValueFloat(camhandle, "AcquisitionFrameRate", 1000.00);
     float fps = KYFG_GetCameraValueFloat(camhandle[selcamnum], "AcquisitionFrameRate");
     status = KYFG_SetCameraValueEnum_ByValueName(camhandle[selcamnum], "PixelFormat", "BayerGR8");
