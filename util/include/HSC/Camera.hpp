@@ -207,6 +207,9 @@ public:
 	virtual void captureFrame(void* data) = 0;
 	/// 画像の取得(ステレオ) : Photron 用
 	virtual void captureFrameStereo(void* dataL, void* dataR) {};
+	/// 画像の取得(単眼複数枚)
+	virtual void captureFrame(uint8_t* data, int num) = 0;
+
 
 	/// idpExpress用
 	virtual void setParam(const paramTypeIdpExpress::AcquisitionMode &pT) {};
