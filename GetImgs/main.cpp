@@ -17,7 +17,7 @@ cv::Mat in_img;
 LARGE_INTEGER freq, start, end2;
 double logtime;
 vector<cv::Mat> cycle_buffer_imgs;
-cv::Mat cvtimg = cv::Mat(1080, 1920, CV_8UC3, cv::Scalar::all(255));
+cv::Mat cvtimg = cv::Mat(896, 896, CV_8UC3, cv::Scalar::all(255));
 
 //コールバック関数
 void Stream_callback_func(void* userContext, STREAM_HANDLE streamHandle)
@@ -83,8 +83,9 @@ void Stream_callback_func2(void* userContext, STREAM_HANDLE streamHandle)
     if (KYFALSE == copyingDataFlag)
     {
         copyingDataFlag = KYTRUE;
-        printf("\rGood callback buffer handle:%X, current index:%d, total frames:%lld        ", streamHandle, buffIndex, totalFrames); //\rは同じ行の先頭に戻ることを意味する
-        memcpy(cvtimg.data, (uchar*)buffData, buffSize);
+        //printf("\rGood callback buffer handle:%X, current index:%d, total frames:%lld        ", streamHandle, buffIndex, totalFrames); //\rは同じ行の先頭に戻ることを意味する
+        cout << buffIndex << endl;
+        memcpy(cvtimg.data, buffData, buffSize);
         cv::cvtColor(cvtimg, cycle_buffer_imgs[buffIndex], CV_BGR2RGB);
 
         //... Show Image with data ...
@@ -93,7 +94,7 @@ void Stream_callback_func2(void* userContext, STREAM_HANDLE streamHandle)
         //時間計測終了
         QueryPerformanceCounter(&end2);
         logtime = (double)(end2.QuadPart - start.QuadPart) / freq.QuadPart;
-        printf(" logtime: %.6f", logtime);
+        //printf(" logtime: %.6f", logtime);
     }
 }
 
@@ -147,7 +148,6 @@ int main() {
 	status = KYFG_CameraOpen2(camhandle[selcamnum], NULL);//カメラを開く
 
 	//カメラの動作設定
-    status = KYFG_CameraCallbackRegister(camhandle[selcamnum], Stream_callback_func2, 0); //Callback関数をセット
    /* int param = 600;
     if (param % 64 != 0) param = param / 64 * 64;*/
     
@@ -158,25 +158,26 @@ int main() {
     status = KYFG_SetCameraValueInt(camhandle[selcamnum], "Width", 896);
     int64_t c = KYFG_GetCameraValueInt(camhandle[selcamnum], "Width");
     KYFG_SetCameraValueInt(camhandle[selcamnum], "Height", 896); //画像のWxHをセット
-    //status = KYFG_SetCameraValueFloat(camhandle, "AcquisitionFrameRate", 1000.00);
+    status = KYFG_SetCameraValueFloat(camhandle[selcamnum], "AcquisitionFrameRate", 1000.00);
     float fps = KYFG_GetCameraValueFloat(camhandle[selcamnum], "AcquisitionFrameRate");
     status = KYFG_SetCameraValueEnum_ByValueName(camhandle[selcamnum], "PixelFormat", "BayerGR8");
     status = KYFG_SetGrabberValueEnum_ByValueName(handle, "PixelFormat", "RGB8");
 
     double d = KYFG_GetCameraValueEnum(camhandle[selcamnum], "Gain");
-    /*status = KYFG_SetCameraValueEnum_ByValueName(camhandle, "Gain", "x2");
-    d = KYFG_GetCameraValueEnum(camhandle, "Gain");*/
+    status = KYFG_SetCameraValueEnum_ByValueName(camhandle[selcamnum], "Gain", "x2");
+    d = KYFG_GetCameraValueEnum(camhandle[selcamnum], "Gain");
 
     int64_t a = KYFG_GetCameraValueInt(camhandle[selcamnum], "WidthMax");
 
     int64_t w = KYFG_GetCameraValueInt(camhandle[selcamnum], "OffsetX");
-    //status = KYFG_SetCameraValueInt(camhandle[selcamnum], "OffsetX", 0);
+    status = KYFG_SetCameraValueInt(camhandle[selcamnum], "OffsetX", 512);
     a = KYFG_GetCameraValueInt(camhandle[selcamnum], "OffsetXMax");
 
     float x = KYFG_GetCameraValueFloat(camhandle[selcamnum], "ExposureTime");
     float g = KYFG_GetCameraValueFloat(camhandle[selcamnum], "pExposureTimeRegMax");
     status = KYFG_SetCameraValueFloat(camhandle[selcamnum], "ExposureTime", 912);
 
+    status = KYFG_CameraCallbackRegister(camhandle[selcamnum], Stream_callback_func2, 0); //Callback関数をセット
     status = KYFG_StreamCreateAndAlloc(camhandle[selcamnum], &streamhandle, cyclebuffersize, 0);//Cyclic frame bufferのStreamの設定
 
     status = KYFG_CameraStart(camhandle[selcamnum], streamhandle, 0);//カメラの動作開始，Framesを0にすると連続して画像を取り続ける

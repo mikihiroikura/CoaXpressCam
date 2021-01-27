@@ -201,12 +201,13 @@ void kayacoaxpress::captureFrame(void* data)
 
 void kayacoaxpress::captureFrame(uint8_t* data, int num)
 {
-	int callno;
+	int callno = KYFG_StreamGetFrameIndex(stream_handle) - 1;
+	int outno;
 	for (size_t i = 0; i < num; i++)
 	{
-		callno = KYFG_StreamGetFrameIndex(stream_handle) - 1 - i;
-		if (callno < 0) callno += kayacoaxpress::cycle_buffer_size;
-		memcpy(data + KYFG_StreamGetSize(stream_handle) * i, cycle_buffer_imgs[callno].data, KYFG_StreamGetSize(stream_handle));
+		outno = callno - i;
+		if (outno < 0) outno += kayacoaxpress::cycle_buffer_size;
+		memcpy(data + KYFG_StreamGetSize(stream_handle) * i, cycle_buffer_imgs[outno].data, KYFG_StreamGetSize(stream_handle));
 	}
 		
 	//long long buffSize = 0;
