@@ -1,0 +1,2122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xiapi_description>
+	<!--versions-->
+	<xiapi_release_tag>API_INST_V0_01_02_A</xiapi_release_tag>
+	<!--XIAPI SetParam/GetParam parameters-->
+	<parameters>
+		<group>
+			<group_name>Device info parameters</group_name>
+			<parameter>
+				<name>XI_PRM_DEVICE_NAME</name>
+				<xiapi_name>device_name</xiapi_name>
+				<short_name>CameraName</short_name>
+				<type>xiTypeString</type>
+				<short_description>Return device name</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_DEVICE_TYPE</name>
+				<xiapi_name>device_type</xiapi_name>
+				<short_name>CameraType</short_name>
+				<type>xiTypeString</type>
+				<short_description>Return device type</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_DEVICE_SN</name>
+				<xiapi_name>device_sn</xiapi_name>
+				<short_name>SerialNumber</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Return device serial number</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_DEVICE_INSTANCE_PATH</name>
+				<xiapi_name>device_inst_path</xiapi_name>
+				<short_name>DevicePath</short_name>
+				<type>xiTypeString</type>
+				<short_description>Return device system instance path.</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>Device acquisition settings</group_name>
+			<parameter>
+				<name>XI_PRM_EXPOSURE</name>
+				<xiapi_name>exposure</xiapi_name>
+				<short_name>ExposureTime</short_name>
+				<type>xiTypeInteger</type>
+				<unit>micro seconds</unit>
+				<short_description>Exposure time in microseconds</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_GAIN</name>
+				<xiapi_name>gain</xiapi_name>
+				<short_name>Gain</short_name>
+				<type>xiTypeFloat</type>
+				<unit>decibels</unit>
+				<short_description>Gain in dB</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_DOWNSAMPLING</name>
+				<xiapi_name>downsampling</xiapi_name>
+				<short_name>Downsampling</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Change image resolution by binning or skipping.</short_description>
+				<default_value>1</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_DOWNSAMPLING_TYPE</name>
+				<xiapi_name>downsampling_type</xiapi_name>
+				<short_name>DownsamplingType</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_DOWNSAMPLING_TYPE</associated_enumerator>
+				<short_description>Change image downsampling type.</short_description>
+				<default_value>XI_BINNING</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_IMAGE_DATA_FORMAT</name>
+				<xiapi_name>imgdataformat</xiapi_name>
+				<short_name>ImageDataFormat</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_IMG_FORMAT</associated_enumerator>
+				<short_description>Output data format.</short_description>
+				<default_value>XI_MONO8</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_SENSOR_DATA_BIT_DEPTH</name>
+				<xiapi_name>sensor_bit_depth</xiapi_name>
+				<short_name>SensorDataBitDepth</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Sensor output data bit depth.</short_description>
+				<default_value>(depend on sensor).</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_OUTPUT_DATA_BIT_DEPTH</name>
+				<xiapi_name>output_bit_depth</xiapi_name>
+				<short_name>DeviceOutputDataBitDepth</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Device output data bit depth.</short_description>
+				<default_value>12</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_FRAMERATE</name>
+				<xiapi_name>framerate</xiapi_name>
+				<short_name>FrameRate</short_name>
+				<type>xiTypeFloat</type>
+				<unit>frames per second</unit>
+				<short_description>Define framerate in Hz</short_description>
+				<default_value>(depend on sensor, downsalmping and resolution)</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_ACQ_TIMING_MODE</name>
+				<xiapi_name>acq_timing_mode</xiapi_name>
+				<short_name>AcquisitionTimingMode</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_ACQ_TIMING_MODE</associated_enumerator>
+				<short_description>Type of sensor frames timing.</short_description>
+				<default_value>(depend on sensor, downsalmping and resolution)</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_AVAILABLE_BANDWIDTH</name>
+				<xiapi_name>available_bandwidth</xiapi_name>
+				<short_name>BandwidthAvailable</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Calculate and return available interface bandwidth(int Megabits)</short_description>
+				<default_value>(depend on interface).</default_value>
+				<readonly>true</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_LIMIT_BANDWIDTH</name>
+				<xiapi_name>limit_bandwidth</xiapi_name>
+				<short_name>BandwidthLimit</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Set/get bandwidth(datarate)(in Megabits)</short_description>
+				<default_value>(depend on interface).</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_BUFFER_POLICY</name>
+				<xiapi_name>buffer_policy</xiapi_name>
+				<short_name>BufferPolicy</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_BP</associated_enumerator>
+				<short_description>Data move policy</short_description>
+				<default_value>BP_UNSAFE</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_WIDTH</name>
+				<xiapi_name>width</xiapi_name>
+				<short_name>Width</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Width of the Image provided by the device (in pixels).</short_description>
+				<default_value>(depend on sensor, downsalmping and offsetX)</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_HEIGHT</name>
+				<xiapi_name>height</xiapi_name>
+				<short_name>Height</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Height of the Image provided by the device (in pixels).</short_description>
+				<default_value>(depend on sensor, downsalmping and offsetY)</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_OFFSET_X</name>
+				<xiapi_name>offsetX</xiapi_name>
+				<short_name>OffsetX</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Horizontal offset from the origin to the area of interest (in pixels).</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_OFFSET_Y</name>
+				<xiapi_name>offsetY</xiapi_name>
+				<short_name>OffsetY</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Vertical offset from the origin to the area of interest (in pixels).</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_LUT_EN</name>
+				<xiapi_name>LUTEnable</xiapi_name>
+				<short_name>LookUpTable</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Activates LUT.</short_description>
+				<default_value>XI_OFF(disabled)</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_LUT_INDEX</name>
+				<xiapi_name>LUTIndex</xiapi_name>
+				<short_name>LookUpTableIndex</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Control the index (offset) of the coefficient to access in the LUT.</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_LUT_VALUE</name>
+				<xiapi_name>LUTValue</xiapi_name>
+				<short_name>LookUpTableValue</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Value at entry LUTIndex of the LUT</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_TRG_SOURCE</name>
+				<xiapi_name>trigger_source</xiapi_name>
+				<short_name>TriggerSource</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_TRG_SOURCE</associated_enumerator>
+				<short_description>Defines source of trigger.</short_description>
+				<default_value>XI_TRG_OFF</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_TRG_SELECTOR</name>
+				<xiapi_name>trigger_selector</xiapi_name>
+				<short_name>TriggerSelector</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_TRG_SELECTOR</associated_enumerator>
+				<short_description>Selects the type of trigger.</short_description>
+				<default_value>XI_TRG_SEL_FRAME_START</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_TRG_SOFTWARE</name>
+				<xiapi_name>trigger_software</xiapi_name>
+				<short_name>TriggerSoftware</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Generates an internal trigger. XI_PRM_TRG_SOURCE must be set to TRG_SOFTWARE.</short_description>
+				<default_value>-</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_GPI_SELECTOR</name>
+				<xiapi_name>gpi_selector</xiapi_name>
+				<short_name>GPISelector</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Selects GPI</short_description>
+				<default_value>1</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_GPI_MODE</name>
+				<xiapi_name>gpi_mode</xiapi_name>
+				<short_name>GPIMode</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_GPI_MODE</associated_enumerator>
+				<short_description>Defines GPI functionality</short_description>
+				<default_value>XI_GPI_OFF</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_GPI_LEVEL</name>
+				<xiapi_name>gpi_level</xiapi_name>
+				<short_name>GPILevel</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>GPI level</short_description>
+				<default_value>-</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_GPO_SELECTOR</name>
+				<xiapi_name>gpo_selector</xiapi_name>
+				<short_name>GPOSelector</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Selects GPO</short_description>
+				<default_value>1</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_GPO_MODE</name>
+				<xiapi_name>gpo_mode</xiapi_name>
+				<short_name>GPOMode</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_GPO_MODE</associated_enumerator>
+				<short_description>Defines GPO functionality</short_description>
+				<default_value>XI_GPO_OFF</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_LED_SELECTOR</name>
+				<xiapi_name>led_selector</xiapi_name>
+				<short_name>LEDSelector</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Selects LED</short_description>
+				<default_value>1</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_LED_MODE</name>
+				<xiapi_name>led_mode</xiapi_name>
+				<short_name>LEDMode</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_LED_MODE</associated_enumerator>
+				<short_description>Defines LED functionality</short_description>
+				<default_value>XI_LED_HEARTBEAT</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_ACQ_FRAME_BURST_COUNT</name>
+				<xiapi_name>acq_frame_burst_count</xiapi_name>
+				<short_name>AcquisitionFrameBurstCount</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Sets number of frames acquired by burst. This burst is used only if trigger is set to FrameBurstStart</short_description>
+				<default_value>1</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>Extended Device parameters</group_name>
+			<parameter>
+				<name>XI_PRM_IS_DEVICE_EXIST</name>
+				<xiapi_name>isexist</xiapi_name>
+				<short_name>Exist</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Returns 1 if camera connected and works properly.</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_ACQ_BUFFER_SIZE</name>
+				<xiapi_name>acq_buffer_size</xiapi_name>
+				<short_name>AcquisitionBufferSizeBytes</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Acquisition buffer size in bytes</short_description>
+				<default_value>532488000</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_ACQ_TRANSPORT_BUFFER_SIZE</name>
+				<xiapi_name>acq_transport_buffer_size</xiapi_name>
+				<short_name>AcquisitionTransportBufferSizeBytes</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Acquisition transport buffer size in bytes</short_description>
+				<default_value>1048576</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_BUFFERS_QUEUE_SIZE</name>
+				<xiapi_name>buffers_queue_size</xiapi_name>
+				<short_name>AcquisitionQueueImagesCount</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Queue of field/frame buffers</short_description>
+				<default_value>4</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_RECENT_FRAME</name>
+				<xiapi_name>recent_frame</xiapi_name>
+				<short_name>SelectRecentImage</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>GetImage returns most recent frame</short_description>
+				<default_value>0</default_value>
+				<readonly>true</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>Color management settings</group_name>
+			<parameter>
+				<name>XI_PRM_CMS</name>
+				<xiapi_name>cms</xiapi_name>
+				<short_name>ColorManagementMode</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_CMS_MODE</associated_enumerator>
+				<short_description>Initialize/uninitialize CMS, perceptual inetent.</short_description>
+				<default_value>XI_CMS_DIS</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_APPLY_CMS</name>
+				<xiapi_name>apply_cms</xiapi_name>
+				<short_name>ColorManagementApply</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Apply CMS profiles(input.icc and output.icm), perceptual inetent.</short_description>
+				<default_value>XI_OFF</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_INPUT_CMS_PROFILE</name>
+				<xiapi_name>input_cms_profile</xiapi_name>
+				<short_name>ColorManagementInputProfile</short_name>
+				<type>xiTypeString</type>
+				<short_description>Apply input CMS profile.</short_description>
+				<default_value>(default device profile)</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_OUTPUT_CMS_PROFILE</name>
+				<xiapi_name>output_cms_profile</xiapi_name>
+				<short_name>ColorManagementOutputProfile</short_name>
+				<type>xiTypeString</type>
+				<short_description>Apply output CMS profile.</short_description>
+				<default_value>(sRGB profile)</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_IMAGE_IS_COLOR</name>
+				<xiapi_name>iscolor</xiapi_name>
+				<short_name>SensorColor</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Returns 1 for color cameras.</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_COLOR_FILTER_ARRAY</name>
+				<xiapi_name>cfa</xiapi_name>
+				<short_name>SensorColorFilterArray</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_COLOR_FILTER_ARRAY</associated_enumerator>
+				<short_description>Returns color filter array type of RAW data.</short_description>
+				<default_value>-</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_WB_KR</name>
+				<xiapi_name>wb_kr</xiapi_name>
+				<short_name>WhiteBalanceRed</short_name>
+				<type>xiTypeFloat</type>
+				<short_description>White balance red coefficient</short_description>
+				<default_value>1</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_WB_KG</name>
+				<xiapi_name>wb_kg</xiapi_name>
+				<short_name>WhiteBalanceGreen</short_name>
+				<type>xiTypeFloat</type>
+				<short_description>White balance green coefficient</short_description>
+				<default_value>1</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_WB_KB</name>
+				<xiapi_name>wb_kb</xiapi_name>
+				<short_name>WhiteBalanceBlue</short_name>
+				<type>xiTypeFloat</type>
+				<short_description>White balance blue coefficient</short_description>
+				<default_value>1</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_MANUAL_WB</name>
+				<xiapi_name>manual_wb</xiapi_name>
+				<short_name>WhiteBalanceManualNow</short_name>
+				<type>xiTypeCommand</type>
+				<short_description>Calculates White Balance(xiGetImage function must be called)</short_description>
+				<default_value>-</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_AUTO_WB</name>
+				<xiapi_name>auto_wb</xiapi_name>
+				<short_name>WhiteBalanceAuto</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Automatic white balance</short_description>
+				<default_value>XI_OFF</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_GAMMAY</name>
+				<xiapi_name>gammaY</xiapi_name>
+				<short_name>GammaLuminosity</short_name>
+				<type>xiTypeFloat</type>
+				<short_description>Luminosity gamma</short_description>
+				<default_value>1.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_GAMMAC</name>
+				<xiapi_name>gammaC</xiapi_name>
+				<short_name>GammaChromaticity</short_name>
+				<type>xiTypeFloat</type>
+				<short_description>Chromaticity gamma</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_SHARPNESS</name>
+				<xiapi_name>sharpness</xiapi_name>
+				<short_name>Sharpness</short_name>
+				<type>xiTypeFloat</type>
+				<short_description>Sharpness Strenght</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_00</name>
+				<xiapi_name>ccMTX00</xiapi_name>
+				<short_name>ColorCorrectionMatrix00</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [0][0]</short_description>
+				<default_value>1.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_01</name>
+				<xiapi_name>ccMTX01</xiapi_name>
+				<short_name>ColorCorrectionMatrix01</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [0][1]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_02</name>
+				<xiapi_name>ccMTX02</xiapi_name>
+				<short_name>ColorCorrectionMatrix02</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [0][2]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_03</name>
+				<xiapi_name>ccMTX03</xiapi_name>
+				<short_name>ColorCorrectionMatrix03</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [0][3]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_10</name>
+				<xiapi_name>ccMTX10</xiapi_name>
+				<short_name>ColorCorrectionMatrix10</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [1][0]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_11</name>
+				<xiapi_name>ccMTX11</xiapi_name>
+				<short_name>ColorCorrectionMatrix11</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [1][1]</short_description>
+				<default_value>1.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_12</name>
+				<xiapi_name>ccMTX12</xiapi_name>
+				<short_name>ColorCorrectionMatrix12</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [1][2]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_13</name>
+				<xiapi_name>ccMTX13</xiapi_name>
+				<short_name>ColorCorrectionMatrix13</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [1][3]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_20</name>
+				<xiapi_name>ccMTX20</xiapi_name>
+				<short_name>ColorCorrectionMatrix20</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [2][0]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_21</name>
+				<xiapi_name>ccMTX21</xiapi_name>
+				<short_name>ColorCorrectionMatrix21</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [2][1]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_22</name>
+				<xiapi_name>ccMTX22</xiapi_name>
+				<short_name>ColorCorrectionMatrix22</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [2][2]</short_description>
+				<default_value>1.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_23</name>
+				<xiapi_name>ccMTX23</xiapi_name>
+				<short_name>ColorCorrectionMatrix23</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [2][3]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_30</name>
+				<xiapi_name>ccMTX30</xiapi_name>
+				<short_name>ColorCorrectionMatrix30</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [3][0]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_31</name>
+				<xiapi_name>ccMTX31</xiapi_name>
+				<short_name>ColorCorrectionMatrix31</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [3][1]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_32</name>
+				<xiapi_name>ccMTX32</xiapi_name>
+				<short_name>ColorCorrectionMatrix32</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [3][2]</short_description>
+				<default_value>1.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CC_MATRIX_33</name>
+				<xiapi_name>ccMTX33</xiapi_name>
+				<short_name>ColorCorrectionMatrix33</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Color Correction Matrix element [3][3]</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_SET_DEFAULT_CC_MATRIX</name>
+				<xiapi_name>defccMTX</xiapi_name>
+				<short_name>ColorCorrectionMatrixDefault</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Set default Color Correction Matrix</short_description>
+				<default_value>0.0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>Automatic exposure/gain</group_name>
+			<parameter>
+				<name>XI_PRM_AEAG</name>
+				<xiapi_name>aeag</xiapi_name>
+				<short_name>AutoExposureAutoGain</short_name>
+				<type>xiTypeInteger</type>
+				<unit/>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Automatic exposure/gain</short_description>
+				<example_c/>
+				<default_value>XI_OFF</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_EXP_PRIORITY</name>
+				<xiapi_name>exp_priority</xiapi_name>
+				<short_name>AutoExposureAutoGainExposurePriority</short_name>
+				<type>xiTypeFloat</type>
+				<unit/>
+				<associated_enumerator/>
+				<short_description>Exposure priority (0.5 - exposure 50%, gain 50%).</short_description>
+				<example_c/>
+				<default_value>0.8</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_AE_MAX_LIMIT</name>
+				<xiapi_name>ae_max_limit</xiapi_name>
+				<short_name>AutoExposureTopLimit</short_name>
+				<type>xiTypeInteger</type>
+				<unit/>
+				<associated_enumerator/>
+				<short_description>Maximum limit of exposure in AEAG procedure</short_description>
+				<example_c/>
+				<default_value>1000000(1s)</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_AG_MAX_LIMIT</name>
+				<xiapi_name>ag_max_limit</xiapi_name>
+				<short_name>AutoGainTopLimit</short_name>
+				<type>xiTypeFloat</type>
+				<unit/>
+				<associated_enumerator/>
+				<short_description>Maximum limit of gain in AEAG procedure</short_description>
+				<example_c/>
+				<default_value>defined by sensor</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_AEAG_LEVEL</name>
+				<xiapi_name>aeag_level</xiapi_name>
+				<short_name>AutoExposureAutoGainTargetLevel</short_name>
+				<type>xiTypeInteger</type>
+				<unit/>
+				<associated_enumerator/>
+				<short_description>Average intensity of output signal AEAG should achieve(in %)</short_description>
+				<example_c/>
+				<default_value>40(%)</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>Bad Pixels Correction</group_name>
+			<parameter>
+				<name>XI_PRM_BPC</name>
+				<xiapi_name>bpc</xiapi_name>
+				<short_name>BadPixelCorrection</short_name>
+				<type>xiTypeInteger</type>
+				<unit/>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Correction of bad pixels</short_description>
+				<example_c/>
+				<default_value>XI_OFF(disabled)</default_value>
+				<readonly>false</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>Debounce</group_name>
+			<parameter>
+				<name>XI_PRM_DEBOUNCE_EN</name>
+				<xiapi_name>dbnc_en</xiapi_name>
+				<short_name>GPIDebounce</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Enable/Disable debounce to selected GPI</short_description>
+				<default_value>XI_OFF</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_DEBOUNCE_T0</name>
+				<xiapi_name>dbnc_t0</xiapi_name>
+				<short_name>GPIDebounceFirstEdge</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator/>
+				<unit>10 microseconds</unit>
+				<short_description>Debounce time (x * 10us)</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_DEBOUNCE_T1</name>
+				<xiapi_name>dbnc_t1</xiapi_name>
+				<short_name>GPIDebounceSecondEdge</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator/>
+				<unit>10 microseconds</unit>
+				<short_description>Debounce time (x * 10us)</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_DEBOUNCE_POL</name>
+				<xiapi_name>dbnc_pol</xiapi_name>
+				<short_name>GPIDebouncePolarity</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator/>
+				<short_description>Debounce polarity (pol = 1 t0 - falling edge, t1 - rising edge)</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>Temperature control</group_name>
+			<parameter>
+				<name>XI_PRM_IS_COOLED</name>
+				<xiapi_name>iscooled</xiapi_name>
+				<short_name>Cooled</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator/>
+				<short_description>Returns 1 for cameras that support cooling.</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_COOLING</name>
+				<xiapi_name>cooling</xiapi_name>
+				<short_name>Cooling</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Start camera cooling.</short_description>
+				<default_value>XI_OFF</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_TARGET_TEMP</name>
+				<xiapi_name>target_temp</xiapi_name>
+				<short_name>TargetTemperature</short_name>
+				<type>xiTypeFloat</type>
+				<associated_enumerator/>
+				<short_description>Set sensor target temperature for cooling.</short_description>
+				<default_value>25</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_CHIP_TEMP</name>
+				<xiapi_name>chip_temp</xiapi_name>
+				<short_name>TemperatureSensor</short_name>
+				<type>xiTypeFloat</type>
+				<associated_enumerator/>
+				<short_description>Camera sensor temperature</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_HOUS_TEMP</name>
+				<xiapi_name>hous_temp</xiapi_name>
+				<short_name>TemperatureHousing</short_name>
+				<type>xiTypeFloat</type>
+				<associated_enumerator/>
+				<short_description>Camera housing tepmerature</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>Sensor features</group_name>
+			<parameter>
+				<name>XI_PRM_SENSOR_MODE</name>
+				<xiapi_name>sensor_mode</xiapi_name>
+				<short_name>SensorMode</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Current sensor mode. Allows to select sensor mode by one integer. Setting of this parameter affects: image dimensions and downsampling.</short_description>
+				<default_value>0</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_HDR</name>
+				<xiapi_name>hdr</xiapi_name>
+				<short_name>HDR</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<short_description>Enable High Dynamic Range feature.</short_description>
+				<default_value>XI_OFF</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_HDR_T1</name>
+				<xiapi_name>hdr_t1</xiapi_name>
+				<short_name>HDRTimeSlope1</short_name>
+				<type>xiTypeInteger</type>
+				<unit>micro seconds</unit>
+				<associated_enumerator/>
+				<unit>micro seconds</unit>
+				<short_description>Exposure time of first slope(in % of XI_PRM_EXPOSURE)</short_description>
+				<default_value>40</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_HDR_T2</name>
+				<xiapi_name>hdr_t2</xiapi_name>
+				<short_name>HDRTimeSlope2</short_name>
+				<type>xiTypeInteger</type>
+				<unit>micro seconds</unit>
+				<associated_enumerator/>
+				<unit>micro seconds</unit>
+				<short_description>Exposure time of second slope(in % of XI_PRM_EXPOSURE)</short_description>
+				<default_value>20</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_KNEEPOINT1</name>
+				<xiapi_name>hdr_kneepoint1</xiapi_name>
+				<short_name>HDRKnee1Percent</short_name>
+				<type>xiTypeInteger</type>
+				<unit>percent</unit>
+				<associated_enumerator/>
+				<unit>percents</unit>
+				<short_description>First kneepoint (% of sensor saturation)</short_description>
+				<default_value>60</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_KNEEPOINT2</name>
+				<xiapi_name>hdr_kneepoint2</xiapi_name>
+				<short_name>HDRKnee2Percent</short_name>
+				<type>xiTypeInteger</type>
+				<associated_enumerator/>
+				<unit>percents</unit>
+				<short_description>Second kneepoint (% of sensor saturation)</short_description>
+				<default_value>40</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_HDR_CURVE_GAMMA</name>
+				<xiapi_name>hdr_curve_gamma</xiapi_name>
+				<short_name>HDRCurveGamma</short_name>
+				<type>xiTypeFloat</type>
+				<associated_enumerator/>
+				<unit>counts</unit>
+				<short_description>Coefficient of HDR curve y = x pow hdr_curve_gamma, sets fixed exorure times XI_PRM_HDR_T1 and XI_PRM_HDR_T2, approximates XI_PRM_KNEEPOINT1 and XI_PRM_KNEEPOINT2</short_description>
+				<default_value>1</default_value>
+				<readonly>false</readonly>
+				<ds_en>false</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>Version info</group_name>
+			<parameter>
+				<name>XI_PRM_API_VERSION</name>
+				<xiapi_name>api_version</xiapi_name>
+				<short_name>VersionAPI</short_name>
+				<type>xiTypeString</type>
+				<associated_enumerator/>
+				<short_description>Returns version of API.</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_DRV_VERSION</name>
+				<xiapi_name>drv_version</xiapi_name>
+				<short_name>VersionDriver</short_name>
+				<type>xiTypeString</type>
+				<associated_enumerator/>
+				<short_description>Returns version of current device driver.</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_MCU1_VERSION</name>
+				<xiapi_name>version_mcu1</xiapi_name>
+				<short_name>VersionMCU1</short_name>
+				<type>xiTypeString</type>
+				<associated_enumerator/>
+				<short_description>Returns version of MCU1 firmware.</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_MCU2_VERSION</name>
+				<xiapi_name>version_mcu2</xiapi_name>
+				<short_name>VersionMCU2</short_name>
+				<type>xiTypeString</type>
+				<associated_enumerator/>
+				<short_description>Returns version of MCU2 firmware.</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_FPGA1_VERSION</name>
+				<xiapi_name>version_fpga1</xiapi_name>
+				<short_name>VersionFPGA1</short_name>
+				<type>xiTypeString</type>
+				<associated_enumerator/>
+				<short_description>Returns version of FPGA1 firmware.</short_description>
+				<default_value>-</default_value>
+				<readonly>true</readonly>
+				<ds_en>true</ds_en>
+			</parameter>
+		</group>
+		<group>
+			<group_name>API features</group_name>
+			<parameter>
+				<name>XI_PRM_DEBUG_LEVEL</name>
+				<xiapi_name>debug_level</xiapi_name>
+				<short_name>DebugLevel</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Set debug level</short_description>
+				<default_value>XI_DL_ERROR</default_value>
+				<associated_enumerator>XI_DEBUG_LEVEL</associated_enumerator>
+				<readonly>false</readonly>
+				<api_global>true</api_global>
+				<ds_en>false</ds_en>
+			</parameter>
+			<parameter>
+				<name>XI_PRM_AUTO_BANDWIDTH_CALCULATION</name>
+				<xiapi_name>auto_bandwidth_calculation</xiapi_name>
+				<short_name>AutoBandwidthCalculation</short_name>
+				<type>xiTypeInteger</type>
+				<short_description>Automatic bandwidth calculation,</short_description>
+				<default_value>XI_ON</default_value>
+				<associated_enumerator>XI_SWITCH</associated_enumerator>
+				<readonly>false</readonly>
+				<api_global>true</api_global>
+				<ds_en>false</ds_en>
+			</parameter>
+		</group>
+		<modifiers>
+			<modifier>
+				<xiapi_name>:min</xiapi_name>
+				<short_name>:min</short_name>
+				<description>Parameter minimum</description>
+				<type>parameter_name_suffix</type>
+			</modifier>
+			<modifier>
+				<xiapi_name>:max</xiapi_name>
+				<short_name>:max</short_name>
+				<description>Parameter maximum</description>
+				<type>parameter_name_suffix</type>
+			</modifier>
+			<modifier>
+				<xiapi_name>:inc</xiapi_name>
+				<short_name>:inc</short_name>
+				<description>Parameter increment</description>
+				<type>parameter_name_suffix</type>
+			</modifier>
+			<modifier>
+				<xiapi_name>:info</xiapi_name>
+				<short_name>:info</short_name>
+				<description>Parameter value</description>
+				<type>parameter_name_suffix</type>
+			</modifier>
+			<modifier>
+				<xiapi_name>:increment</xiapi_name>
+				<short_name>:increment</short_name>
+				<description>Possible increment of parameter. Values min+X*increment are allowed to set.</description>
+				<type>parameter_name_suffix</type>
+			</modifier>
+			<modifier>
+				<xiapi_name>:direct_update</xiapi_name>
+				<short_name>:direct_update</short_name>
+				<description>Direct update (on the fly) application of parameter without stopping the stream (e.g. Exposure, Gain).</description>
+				<type>parameter_name_suffix</type>
+			</modifier>
+		</modifiers>
+	</parameters>
+	<!--M3API and XIAPI return values list-->
+	<return_values>
+		<return_value>
+			<name>MM40_OK</name>
+			<value> 0</value>
+			<description>Function call succeeded</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_HANDLE</name>
+			<value> 1</value>
+			<description>Invalid handle</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_READREG</name>
+			<value> 2</value>
+			<description>Register read error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_WRITEREG</name>
+			<value> 3</value>
+			<description>Register write error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_FREE_RESOURCES</name>
+			<value> 4</value>
+			<description>Freeing resiurces error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_FREE_CHANNEL</name>
+			<value> 5</value>
+			<description>Freeing channel error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_FREE_BANDWIDTH</name>
+			<value> 6</value>
+			<description>Freeing bandwith error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_READBLK</name>
+			<value> 7</value>
+			<description>Read block error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_WRITEBLK</name>
+			<value> 8</value>
+			<description>Write block error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_NO_IMAGE</name>
+			<value> 9</value>
+			<description>No image</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_TIMEOUT</name>
+			<value>10</value>
+			<description>Timeout</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_ARG</name>
+			<value>11</value>
+			<description>Invalid arguments supplied</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_NOT_SUPPORTED</name>
+			<value>12</value>
+			<description>Not supported</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_ISOCH_ATTACH_BUFFERS</name>
+			<value>13</value>
+			<description>Attach buffers error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_GET_OVERLAPPED_RESULT</name>
+			<value>14</value>
+			<description>Overlapped result</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_MEMORY_ALLOCATION</name>
+			<value>15</value>
+			<description>Memory allocation error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_DLLCONTEXTISNULL</name>
+			<value>16</value>
+			<description>DLL context is NULL</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_DLLCONTEXTISNONZERO</name>
+			<value>17</value>
+			<description>DLL context is non zero</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_DLLCONTEXTEXIST</name>
+			<value>18</value>
+			<description>DLL context exists</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_TOOMANYDEVICES</name>
+			<value>19</value>
+			<description>Too many devices connected</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_ERRORCAMCONTEXT</name>
+			<value>20</value>
+			<description>Camera context error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_UNKNOWN_HARDWARE</name>
+			<value>21</value>
+			<description>Unknown hardware</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_TM_FILE</name>
+			<value>22</value>
+			<description>Invalid TM file</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_TM_TAG</name>
+			<value>23</value>
+			<description>Invalid TM tag</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INCOMPLETE_TM</name>
+			<value>24</value>
+			<description>Incomplete TM</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_BUS_RESET_FAILED</name>
+			<value>25</value>
+			<description>Bus reset error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_NOT_IMPLEMENTED</name>
+			<value>26</value>
+			<description>Not implemented</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_SHADING_TOOBRIGHT</name>
+			<value>27</value>
+			<description>Shading too bright</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_SHADING_TOODARK</name>
+			<value>28</value>
+			<description>Shading too dark</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_TOO_LOW_GAIN</name>
+			<value>29</value>
+			<description>Gain is too low</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_BPL</name>
+			<value>30</value>
+			<description>Invalid bad pixel list</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_BPL_REALLOC</name>
+			<value>31</value>
+			<description>Bad pixel list realloc error</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_PIXEL_LIST</name>
+			<value>32</value>
+			<description>Invalid pixel list</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_FFS</name>
+			<value>33</value>
+			<description>Invalid Flash File System</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_PROFILE</name>
+			<value>34</value>
+			<description>Invalid profile</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_CALIBRATION</name>
+			<value>35</value>
+			<description>Invalid calibration</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_BUFFER</name>
+			<value>36</value>
+			<description>Invalid buffer</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_DATA</name>
+			<value>38</value>
+			<description>Invalid data</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_TGBUSY</name>
+			<value>39</value>
+			<description>Timing generator is busy</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_IO_WRONG</name>
+			<value>40</value>
+			<description>Wrong operation open/write/read/close</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_ACQUISITION_ALREADY_UP</name>
+			<value>41</value>
+			<description>Acquisition already started</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_OLD_DRIVER_VERSION</name>
+			<value>42</value>
+			<description>Old version of device driver installed to the system.</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_GET_LAST_ERROR</name>
+			<value>43</value>
+			<description>To get error code please call GetLastError function.</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_CANT_PROCESS</name>
+			<value>44</value>
+			<description>Data can't be processed</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_ACQUISITION_STOPED</name>
+			<value>45</value>
+			<description>Acquisition has been stopped. It should be started before GetImage.</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_ACQUISITION_STOPED_WERR</name>
+			<value>46</value>
+			<description>Acquisition has been stoped with error.</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_INPUT_ICC_PROFILE</name>
+			<value>47</value>
+			<description>Input ICC profile missed or corrupted</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_INVALID_OUTPUT_ICC_PROFILE</name>
+			<value>48</value>
+			<description>Output ICC profile missed or corrupted</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_DEVICE_NOT_READY</name>
+			<value>49</value>
+			<description>Device not ready to operate</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_SHADING_TOOCONTRAST</name>
+			<value>50</value>
+			<description>Shading too contrast</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_ALREADY_INITIALIZED</name>
+			<value>51</value>
+			<description>Modile already initialized</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_NOT_ENOUGH_PRIVILEGES</name>
+			<value>52</value>
+			<description>Application doesn't enough privileges(one or more app</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_NOT_COMPATIBLE_DRIVER</name>
+			<value>53</value>
+			<description>Installed driver not compatible with current software</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_TM_INVALID_RESOURCE</name>
+			<value>54</value>
+			<description>TM file was not loaded successfully from resources</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_DEVICE_HAS_BEEN_RESETED</name>
+			<value>55</value>
+			<description>Device has been reseted, abnormal initial state</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_NO_DEVICES_FOUND</name>
+			<value>56</value>
+			<description>No Devices Found</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>MM40_RESOURCE_OR_FUNCTION_LOCKED</name>
+			<value>57</value>
+			<description>Resource(device) or function locked by mutex</description>
+			<type>M3API</type>
+		</return_value>
+		<return_value>
+			<name>XI_OK</name>
+			<value>0</value>
+			<description>Function call succeeded</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_UNKNOWN_PARAM</name>
+			<value>100</value>
+			<description>Unknown parameter</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_WRONG_PARAM_VALUE</name>
+			<value>101</value>
+			<description>Wrong parameter value</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_WRONG_PARAM_TYPE</name>
+			<value>103</value>
+			<description>Wrong parameter type</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_WRONG_PARAM_SIZE</name>
+			<value>104</value>
+			<description>Wrong parameter size</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_BUFFER_TOO_SMALL</name>
+			<value>105</value>
+			<description>Input buffer too small</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_NOT_SUPPORTED_PARAM</name>
+			<value>106</value>
+			<description>Parameter info not supported</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_NOT_SUPPORTED_PARAM_INFO</name>
+			<value>107</value>
+			<description>Parameter info not supported</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_NOT_SUPPORTED_DATA_FORMAT</name>
+			<value>108</value>
+			<description>Data format not supported</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_READ_ONLY_PARAM</name>
+			<value>109</value>
+			<description>Read only parameter</description>
+			<type>XIAPI</type>
+		</return_value>
+		<return_value>
+			<name>XI_BANDWIDTH_NOT_SUPPORTED</name>
+			<value>111</value>
+			<description>This camera does not support currently available bandwidth</description>
+			<type>XIAPI</type>
+		</return_value>
+	</return_values>
+	<!--XIAPI Enumerators list-->
+	<enumerators>
+		<enumerator>
+			<name>XI_DEBUG_LEVEL</name>
+			<description>Debug level enumerator.</description>
+			<items>
+				<item>
+					<name>XI_DL_DETAIL</name>
+					<description>Same as trace plus locking resources</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_DL_TRACE</name>
+					<description>Information level.</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_DL_WARNING</name>
+					<description>Warning level.</description>
+					<value>2</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_DL_ERROR</name>
+					<description>Error level.</description>
+					<value>3</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_DL_FATAL</name>
+					<description>Fatal error level.</description>
+					<value>4</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_IMG_FORMAT</name>
+			<description>structure containing information about output image format</description>
+			<items>
+				<item>
+					<name>XI_MONO8</name>
+					<description>8 bits per pixel</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_MONO16</name>
+					<description>16 bits per pixel</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_RGB24</name>
+					<description>RGB data format</description>
+					<value>2</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_RGB32</name>
+					<description>RGBA data format</description>
+					<value>3</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_RGB_PLANAR</name>
+					<description>RGB planar data format</description>
+					<value>4</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_RAW8</name>
+					<description>8 bits per pixel raw data from sensor</description>
+					<value>5</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_RAW16</name>
+					<description>16 bits per pixel raw data from sensor</description>
+					<value>6</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_COLOR_FILTER_ARRAY</name>
+			<description>structure containing information about bayer color matrix</description>
+			<items>
+				<item>
+					<name>XI_CFA_NONE</name>
+					<description> B/W sensors</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_CFA_BAYER_RGGB</name>
+					<description>Regular RGGB</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_CFA_CMYG</name>
+					<description>AK Sony sens</description>
+					<value>2</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_CFA_RGR</name>
+					<description>2R+G readout</description>
+					<value>3</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_CFA_BAYER_BGGR</name>
+					<description>BGGR readout</description>
+					<value>4</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_CFA_BAYER_GRBG</name>
+					<description>GRBG readout</description>
+					<value>5</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_CFA_BAYER_GBRG</name>
+					<description>GBRG readout</description>
+					<value>6</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_BP</name>
+			<description>structure containing information about buffer policy(can be safe, data will be copied to user/app buffer or unsafe, user will get internally allocated buffer without data copy).</description>
+			<items>
+				<item>
+					<name>XI_BP_UNSAFE</name>
+					<description>User gets pointer to internally allocated circle buffer and data may be overwritten by device.</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_BP_SAFE</name>
+					<description>Data from device will be copied to user allocated buffer or xiApi allocated memory.</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_TRG_SOURCE</name>
+			<description>structure containing information about trigger source</description>
+			<items>
+				<item>
+					<name>XI_TRG_OFF</name>
+					<description>Camera works in free run mode.</description>
+					<value>0</value>
+				</item>
+				<item>
+					<name>XI_TRG_EDGE_RISING</name>
+					<description>External trigger (rising edge).</description>
+					<value>1</value>
+				</item>
+				<item>
+					<name>XI_TRG_EDGE_FALLING</name>
+					<description>External trigger (falling edge).</description>
+					<value>2</value>
+				</item>
+				<item>
+					<name>XI_TRG_SOFTWARE</name>
+					<description>Software(manual) trigger.</description>
+					<value>3</value>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_TRG_SELECTOR</name>
+			<description>structure containing information about trigger functionality</description>
+			<items>
+				<item>
+					<name>XI_TRG_SEL_FRAME_START</name>
+					<description>Selects a trigger starting the capture of one frame</description>
+					<value>0</value>
+				</item>
+				<item>
+					<name>XI_TRG_SEL_EXPOSURE_ACTIVE</name>
+					<description>Selects a trigger controlling the duration of one frame.</description>
+					<value>1</value>
+				</item>
+				<item>
+					<name>XI_TRG_SEL_FRAME_BURST_START</name>
+					<description>Selects a trigger starting the capture of the bursts of frames in an acquisition.</description>
+					<value>2</value>
+				</item>
+				<item>
+					<name>XI_TRG_SEL_FRAME_BURST_ACTIVE</name>
+					<description>Selects a trigger controlling the duration of the capture of the bursts of frames in an acquisition.</description>
+					<value>3</value>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_ACQ_TIMING_MODE</name>
+			<description>structure containing information about acqisition timing modes</description>
+			<items>
+				<item>
+					<name>XI_ACQ_TIMING_MODE_FREE_RUN</name>
+					<description>Selects a mode when sensor timing is given by fastest framerate possible (by exposure time and readout).</description>
+					<value>0</value>
+				</item>
+				<item>
+					<name>XI_ACQ_TIMING_MODE_FRAME_RATE</name>
+					<description>Selects a mode when sensor frame acquisition start is given by frame rate.</description>
+					<value>1</value>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_GPI_MODE</name>
+			<description>structure containing information about GPI functionality</description>
+			<items>
+				<item>
+					<name>XI_GPI_OFF</name>
+					<description>Input off. In this mode the input level can be get using parameter XI_PRM_GPI_LEVEL.</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPI_TRIGGER</name>
+					<description>Trigger input</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPI_EXT_EVENT</name>
+					<description>External signal input. It is not implemented yet.</description>
+					<value>2</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_GPO_MODE</name>
+			<description>structure containing information about GPO functionality</description>
+			<items>
+				<item>
+					<name>XI_GPO_OFF</name>
+					<description>Output off</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPO_ON</name>
+					<description>Logical level.</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPO_FRAME_ACTIVE</name>
+					<description>On during exposure(integration) time</description>
+					<value>2</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPO_FRAME_ACTIVE_NEG</name>
+					<description>Off during exposure(integration) time</description>
+					<value>3</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPO_EXPOSURE_ACTIVE</name>
+					<description>On during exposure(integration) time</description>
+					<value>4</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPO_EXPOSURE_ACTIVE_NEG</name>
+					<description>Off during exposure(integration) time</description>
+					<value>5</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPO_FRAME_TRIGGER_READY</name>
+					<description>On when sensor is ready for next trigger edge.</description>
+					<value>6</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPO_FRAME_TRIGGER_READY_NEG</name>
+					<description>Off when sensor is ready for next trigger edge.</description>
+					<value>7</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPO_EXPOSURE_PULSE</name>
+					<description>Short On/Off pulse on start of each exposure.</description>
+					<value>8</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_GPO_EXPOSURE_PULSE_NEG</name>
+					<description>Short Off/On pulse on start of each exposure.</description>
+					<value>9</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_LED_MODE</name>
+			<description>structure containing information about LED functionality</description>
+			<items>
+				<item>
+					<name>XI_LED_HEARTBEAT</name>
+					<description>set led to blink if link is ok, (led 1), heartbeat (led 2)</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_LED_TRIGGER_ACTIVE</name>
+					<description>set led to blink if trigger detected</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_LED_EXT_EVENT_ACTIVE</name>
+					<description>set led to blink if external signal detected</description>
+					<value>2</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_LED_ACQUISITION</name>
+					<description>set led to blink if data streaming</description>
+					<value>3</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_LED_EXPOSURE_ACTIVE</name>
+					<description>set led to blink if sensor integration time</description>
+					<value>4</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_LED_FRAME_ACTIVE</name>
+					<description>set led to blink if device busy/not busy</description>
+					<value>5</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_LED_LINK</name>
+					<description>set led to blink if link is ok</description>
+					<value>6</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_LED_OFF</name>
+					<description>set led to zero</description>
+					<value>7</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_LED_ON</name>
+					<description>set led to one</description>
+					<value>8</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_PRM_TYPE</name>
+			<description>structure containing information about parameters type</description>
+			<items>
+				<item>
+					<name>xiTypeInteger</name>
+					<description>integer parameter type</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>xiTypeFloat</name>
+					<description>float parameter type</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>xiTypeString</name>
+					<description>string parameter type</description>
+					<value>2</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_SWITCH</name>
+			<description>Turn parameter On/Off</description>
+			<items>
+				<item>
+					<name>XI_OFF</name>
+					<description>Turn parameter off</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_ON</name>
+					<description>Turn parameter on</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_DOWNSAMPLING_TYPE</name>
+			<description>Downsampling types</description>
+			<items>
+				<item>
+					<name>XI_BINNING</name>
+					<description>Downsampling is using  binning</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_SKIPPING</name>
+					<description>Downsampling is using  skipping</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+		<enumerator>
+			<name>XI_CMS_MODE</name>
+			<description>structure containing information about CMS functionality</description>
+			<items>
+				<item>
+					<name>XI_CMS_DIS</name>
+					<description>CMS disable</description>
+					<value>0</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_CMS_EN</name>
+					<description>CMS enable</description>
+					<value>1</value>
+					<type>integer</type>
+				</item>
+				<item>
+					<name>XI_CMS_EN_FAST</name>
+					<description>CMS enable(fast)</description>
+					<value>2</value>
+					<type>integer</type>
+				</item>
+			</items>
+		</enumerator>
+	</enumerators>
+	<!--XIAPI Structure definitions-->
+	<structures>
+		<structure>
+			<name>XI_IMG, *LPXI_IMG</name>
+			<description>structure containing information about incoming image.</description>
+			<members>
+				<member>
+					<name>size</name>
+					<description>Size of current structure on application side. When xiGetImage is called and size>=SIZE_XI_IMG_V2 then GPI_level, tsSec and tsUSec are filled.</description>
+					<type>DWORD</type>
+				</member>
+				<member>
+					<name>bp</name>
+					<description>pointer to data. If NULL, xiApi allocates new buffer.</description>
+					<type>LPVOID</type>
+				</member>
+				<member>
+					<name>bp_size</name>
+					<description>Filled buffer size. When buffer policy is set to XI_BP_SAFE, xiGetImage will fill this field with current size of image data received.</description>
+					<type>DWORD</type>
+				</member>
+				<member>
+					<name>frm</name>
+					<description>format of incoming data.</description>
+					<type>XI_IMG_FORMAT</type>
+				</member>
+				<member>
+					<name>width</name>
+					<description>width of incoming image.</description>
+					<type>DWORD</type>
+				</member>
+				<member>
+					<name>height</name>
+					<description>height of incoming image.</description>
+					<type>DWORD</type>
+				</member>
+				<member>
+					<name>nframe</name>
+					<description>frame number(reset by exposure, gain, downsampling change).</description>
+					<type>DWORD</type>
+				</member>
+				<member>
+					<name>tsSec</name>
+					<description>TimeStamp in seconds</description>
+					<type>DWORD</type>
+				</member>
+				<member>
+					<name>tsUSec</name>
+					<description>TimeStamp in microseconds</description>
+					<type>DWORD</type>
+				</member>
+				<member>
+					<name>GPI_level</name>
+					<description>Input level</description>
+					<type>DWORD</type>
+				</member>
+				<member>
+					<name>black_level</name>
+					<description>Black level of image (ONLY for MONO and RAW formats)</description>
+					<type>DWORD</type>
+				</member>
+			</members>
+		</structure>
+	</structures>
+	<!--XIAPI Global definitions-->
+	<global_defines>
+		<define>
+			<name>SIZE_XI_IMG_V1</name>
+			<value>28</value>
+			<description>structure size default</description>
+			<type>integer</type>
+		</define>
+		<define>
+			<name>SIZE_XI_IMG_V2</name>
+			<value>40</value>
+			<description>structure size with timestamp and GPI level information</description>
+			<type>integer</type>
+		</define>
+		<define>
+			<name>SIZE_XI_IMG_V3</name>
+			<value>44</value>
+			<description>structure size with black level information</description>
+			<type>integer</type>
+		</define>
+		<define>
+			<name>XI_PRM_INFO_MIN</name>
+			<description>Parameter minimum</description>
+			<value>:min</value>
+			<type>string</type>
+		</define>
+		<define>
+			<name>XI_PRM_INFO_MAX</name>
+			<description>Parameter maximum</description>
+			<value>:max</value>
+			<type>string</type>
+		</define>
+		<define>
+			<name>XI_PRM_INFO_INCREMENT</name>
+			<description>Parameter increment</description>
+			<value>:inc</value>
+			<type>string</type>
+		</define>
+		<define>
+			<name>XI_PRM_INFO</name>
+			<description>Parameter value</description>
+			<value>:info</value>
+			<type>string</type>
+		</define>
+		<define>
+			<name>XI_PRMM_DIRECT_UPDATE</name>
+			<description>Parameter modifier for direct update without stopping the streaming. E.g. XI_PRM_EXPOSURE XI_PRMM_DIRECT_UPDATE can be used with this modifier</description>
+			<value>:direct_update</value>
+			<type>string</type>
+		</define>
+	</global_defines>
+</xiapi_description>
