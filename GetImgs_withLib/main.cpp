@@ -85,7 +85,7 @@ int main() {
 	while (true)
 	{
 		QueryPerformanceCounter(&start);
-		cam.captureFrame(in_img_src, 1);
+		cam.captureFrame(in_img.data);
 		QueryPerformanceCounter(&stop);
 		times = (double)(stop.QuadPart - start.QuadPart) / freq.QuadPart;
 		std::cout << "TakePicture() time: " << times << endl;
