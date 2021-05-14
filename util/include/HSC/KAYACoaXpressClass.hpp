@@ -58,6 +58,8 @@ public:
 
 	void captureFrame(void* data);
 	void captureFrame(uint8_t* data, int num);
+	void captureFrame2(void* data);
+	void captureFrame2(uint8_t* data, int num);
 
 	void setParam(const paramTypeCamera::paramInt& pT, const int param);
 	void setParam(const paramTypeCamera::paramFloat& pT, const float param);

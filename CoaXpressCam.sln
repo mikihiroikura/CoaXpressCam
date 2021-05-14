@@ -19,6 +19,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GetImgs_ver440", "GetImgs_v
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GetImgs_withLib440", "GetImg_withLib440\GetImg_withLib440.vcxproj", "{D8432F20-8C37-4F57-AA0B-B456BABC9981}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SaveHSCImgs", "SaveHSCImgs\SaveHSCImgs.vcxproj", "{3091706F-014F-40D6-8C33-C372AD5E1335}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -83,6 +85,14 @@ Global
 		{D8432F20-8C37-4F57-AA0B-B456BABC9981}.Release|x64.Build.0 = Release|x64
 		{D8432F20-8C37-4F57-AA0B-B456BABC9981}.Release|x86.ActiveCfg = Release|Win32
 		{D8432F20-8C37-4F57-AA0B-B456BABC9981}.Release|x86.Build.0 = Release|Win32
+		{3091706F-014F-40D6-8C33-C372AD5E1335}.Debug|x64.ActiveCfg = Debug|x64
+		{3091706F-014F-40D6-8C33-C372AD5E1335}.Debug|x64.Build.0 = Debug|x64
+		{3091706F-014F-40D6-8C33-C372AD5E1335}.Debug|x86.ActiveCfg = Debug|Win32
+		{3091706F-014F-40D6-8C33-C372AD5E1335}.Debug|x86.Build.0 = Debug|Win32
+		{3091706F-014F-40D6-8C33-C372AD5E1335}.Release|x64.ActiveCfg = Release|x64
+		{3091706F-014F-40D6-8C33-C372AD5E1335}.Release|x64.Build.0 = Release|x64
+		{3091706F-014F-40D6-8C33-C372AD5E1335}.Release|x86.ActiveCfg = Release|Win32
+		{3091706F-014F-40D6-8C33-C372AD5E1335}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
