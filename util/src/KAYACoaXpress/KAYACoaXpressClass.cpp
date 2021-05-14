@@ -216,41 +216,31 @@ void kayacoaxpress::captureFrame(uint8_t* data, int num)
 
 void kayacoaxpress::captureFrame2(uint8_t* data, int num) {
 	long long buffSize = 0;
-	int buffIndex;
+	int buffIndexInit, buffIndex;
 	void* buffData;
 	buffSize = KYFG_StreamGetSize(stream_handle);			// get buffer size 1920x1080
-	buffIndex = KYFG_StreamGetFrameIndex(stream_handle);
-	buffData = KYFG_StreamGetPtr(stream_handle, buffIndex);		// get pointer of buffer data
-	if (format_callback == "BayerGR8")
+	buffIndexInit = KYFG_StreamGetFrameIndex(stream_handle);
+	for (size_t i = 0; i < num; i++)
 	{
-		memcpy(cvt_img.data, buffData, buffSize);
-		cv::cvtColor(cvt_img, cvt_img_after, CV_BGR2RGB);
-		memcpy(data, cvt_img_after.data, buffSize);
-	}
-	else if (format_callback == "Mono8")
-	{
-		memcpy(data, buffData, buffSize);
-	}
-	else
-	{
-		memcpy(data, buffData, buffSize);
-	}
-	buffIndex = (buffIndex - 1 + cycle_buffer_size) % cycle_buffer_size;
-	buffData = KYFG_StreamGetPtr(stream_handle, buffIndex);		// get pointer of buffer data
-	if (format_callback == "BayerGR8")
-	{
-		memcpy(cvt_img.data, buffData, buffSize);
-		cv::cvtColor(cvt_img, cvt_img_after, CV_BGR2RGB);
-		memcpy(data + buffSize, cvt_img_after.data, buffSize);
-	}
-	else if (format_callback == "Mono8")
-	{
-		memcpy(data + buffSize, buffData, buffSize);
-	}
-	else
-	{
-		memcpy(data + buffSize, buffData, buffSize);
-	}
+		buffIndex = (buffIndexInit - i + cycle_buffer_size) % cycle_buffer_size;
+		buffData = KYFG_StreamGetPtr(stream_handle, buffIndex);		// get pointer of buffer data
+		if (format_callback == "BayerGR8")
+		{
+			/*memcpy(cvt_img.data, buffData, buffSize);
+			cv::cvtColor(cvt_img, cvt_img_after, CV_RGB2BGR);
+			memcpy(data + buffSize, cvt_img_after.data, buffSize);*/
+
+			memcpy(data + buffSize * i, buffData, buffSize);
+		}
+		else if (format_callback == "Mono8")
+		{
+			memcpy(data + buffSize * i, buffData, buffSize);
+		}
+		else
+		{
+			memcpy(data + buffSize * i, buffData, buffSize);
+		}
+	}	
 }
 
 void kayacoaxpress::setParam(const paramTypeCamera::paramInt& pT, const int param)
