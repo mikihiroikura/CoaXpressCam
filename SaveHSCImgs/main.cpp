@@ -121,13 +121,14 @@ int main() {
 	//カメラパラメータの設定
 	cout << "Set Camera Params..." << endl;
 	cam.setParam(paramTypeKAYACoaXpress::AcquisitionMode::TriggerMode, 1); //トリガーモードで起動
+	cam.setParam(paramTypeKAYACoaXpress::CaptureType::BayerGRGrab);
 	cam.setParam(paramTypeCamera::paramInt::WIDTH, width);
 	cam.setParam(paramTypeCamera::paramInt::HEIGHT, height);
 	cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetX, offsetx);
 	cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);
 	cam.setParam(paramTypeCamera::paramFloat::FPS, fps);
 	cam.setParam(paramTypeKAYACoaXpress::paramFloat::ExposureTime, exposuretime);
-	cam.setParam(paramTypeKAYACoaXpress::CaptureType::BayerGRGrab);
+	
 	cam.setParam(paramTypeKAYACoaXpress::Gain::x1);
 	
 	cam.parameter_all_print();

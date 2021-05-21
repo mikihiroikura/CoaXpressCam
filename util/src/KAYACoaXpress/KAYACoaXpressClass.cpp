@@ -296,7 +296,7 @@ void kayacoaxpress::setParam(const paramTypeCamera::paramFloat& pT, const float 
 		else
 		{
 			kayacoaxpressMessage(" FPS : MaxˆÈã‚Ìİ’è’l‚ğ—^‚¦‚Ä‚¢‚é‚Ì‚ÅMax‚Éİ’è‚µ‚Ü‚·");
-			fps = 1087.0;
+			fps = KYFG_GetCameraValueFloat(cam_handle, "pFrameRateRegMax");
 		}
 		KYFG_SetCameraValueFloat(cam_handle, "AcquisitionFrameRate", fps);
 		break;
