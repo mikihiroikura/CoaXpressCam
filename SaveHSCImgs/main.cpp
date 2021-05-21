@@ -35,7 +35,7 @@
 using namespace std;
 
 //スレッドの処理時間
-double takepic_time = 0.002;
+double takepic_time = 0.0004;
 double showgl_time = 0.01667;
 double showhsc_time = 0.0333;
 double calcpose_time = 0.002;
@@ -45,12 +45,12 @@ cv::Mat zero, full, zeromulti;
 //カメラパラメータ
 const int width = 896;
 const int height = 896;
-const float fps = 1000.0;
+const float fps = 2000.0;
 const float exposuretime = 912.0;
 const int offsetx = 512;
 const int offsety = 92;
 double map_coeff[4], stretch_mat[4], det, distort[4];
-const int multicnt = 2;
+const int multicnt = 1;
 
 //時間に関する変数
 LARGE_INTEGER start, stop, freq;
@@ -85,6 +85,9 @@ char axisrobmodes[][10] = { "@SRVO", "@START", "@ORG" };
 char axisrobcommand[READBUFFERSIZE] = "";
 const int initaxisstart = 100, initaxisend = 500;
 const int posunits = 100, speedunits = 10;
+
+//#define MOVE_AXISROBOT_
+//#define SAVE_IMGS_
 
 struct Logs
 {
@@ -124,9 +127,11 @@ int main() {
 	cam.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);
 	cam.setParam(paramTypeCamera::paramFloat::FPS, fps);
 	cam.setParam(paramTypeKAYACoaXpress::paramFloat::ExposureTime, exposuretime);
-	cam.setParam(paramTypeKAYACoaXpress::Gain::x1);
 	cam.setParam(paramTypeKAYACoaXpress::CaptureType::BayerGRGrab);
+	cam.setParam(paramTypeKAYACoaXpress::Gain::x1);
+	
 	cam.parameter_all_print();
+	cam.parameter_all_print_debug();
 
 	zero = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT), cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC3, cv::Scalar::all(0));
 	zeromulti = cv::Mat(cam.getParam(paramTypeCamera::paramInt::HEIGHT) * multicnt, cam.getParam(paramTypeCamera::paramInt::WIDTH), CV_8UC3, cv::Scalar::all(0));
@@ -136,14 +141,14 @@ int main() {
 	for (size_t i = 0; i < log_img_finish_cnt_hs; i++) { logs.in_imgs_log.push_back(zero.clone()); }
 	logs.in_imgs_log_ptr = logs.in_imgs_log.data();
 
+	//単軸ロボット
+#ifdef MOVE_AXISROBOT_
 	std::cout << "Set commection to AXIS ROBOT...............";
 	if (!axisrobot.Connect("COM6", 38400, 8, ODDPARITY, 0, 0, 0, 20000, 20000)) {
 		cout << "No connect" << endl;
 		return 1;
 	}
 	std::cout << "OK!" << endl;
-
-	//単軸ロボット
 	snprintf(axisrobcommand, READBUFFERSIZE, "%s%d.1\r\n", axisrobmodes[0], 1);
 	axisrobot.Send(axisrobcommand);
 	memset(axisrobcommand, '\0', READBUFFERSIZE);
@@ -156,12 +161,12 @@ int main() {
 	memset(axisrobcommand, '\0', READBUFFERSIZE);
 	Read_Reply_toEND(&axisrobot);
 	std::cout << "ORG STOP" << endl;
+	thread MoveAxisRobotThread(ControlAxisRobot, &axisrobot, &flg);
+#endif // MOVE_AXISROBOT_
 
 	//カメラ起動
 	cout << "Camera Start!" << endl;
 	cam.start();
-
-	thread MoveAxisRobotThread(ControlAxisRobot, &axisrobot, &flg);
 
 	while (flg)
 	{
@@ -174,27 +179,31 @@ int main() {
 			QueryPerformanceCounter(&takeend);
 			taketime = (double)(takeend.QuadPart - takestart.QuadPart) / freq.QuadPart;
 		}
+		std::cout << "TakePicture() time: " << taketime << endl;
 
 		//LED画像の保存
+#ifdef SAVE_IMGS_
 		memcpy((logs.in_imgs_log_ptr + log_hscimg_cnt)->data, in_img.data, height * width * 3);
 
 
 		log_hscimg_cnt++;
 		if (log_hscimg_cnt >= log_img_finish_cnt_hs) flg = false;
+#endif // SAVE_IMGS_
 	}
 
+#ifdef MOVE_AXISROBOT_
 	if (MoveAxisRobotThread.joinable())MoveAxisRobotThread.join();
-
-	//カメラの停止
-	cam.stop();
-	cam.disconnect();
-
 	//単軸ロボットの停止
 	snprintf(axisrobcommand, READBUFFERSIZE, "%s%d.1\r\n", axisrobmodes[0], 0);
 	axisrobot.Send(axisrobcommand);
 	Read_Reply_toEND(&axisrobot);
 	memset(axisrobcommand, '\0', READBUFFERSIZE);
 	cout << "SERVO OFF" << endl;
+#endif // MOVE_AXISROBOT_
+
+	//カメラの停止
+	cam.stop();
+	cam.disconnect();
 
 
 	FILE* fr;
@@ -207,6 +216,7 @@ int main() {
 	char logfile[256];
 	struct stat statBuf;
 
+#ifdef SAVE_IMGS_
 	std::cout << "Saving imgs..." << endl;
 	//HSCの画像保存
 	strftime(picdir, 256, "D:/Github_output/SuperImposition/SaveHSCImgs/%y%m%d", &now);
@@ -229,6 +239,9 @@ int main() {
 		sprintf(picturename, "%s%05d.png", picsubname, i);//png可逆圧縮
 		cv::imwrite(picturename, logs.in_imgs_log[i]);
 	}
+#endif // SAVE_IMGS_
+
+	
 
 	return 0;
 }
