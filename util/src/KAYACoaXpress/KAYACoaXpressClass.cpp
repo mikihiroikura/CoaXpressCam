@@ -189,9 +189,11 @@ void kayacoaxpress::captureFrame2(void* data)
 	buffData = KYFG_StreamGetPtr(stream_handle, buffIndex);		// get pointer of buffer data
 	if (format_callback == "BayerGR8")
 	{
-		memcpy(cvt_img.data, buffData, buffSize);
+		/*memcpy(cvt_img.data, buffData, buffSize);
 		cv::cvtColor(cvt_img, cvt_img_after, CV_BGR2RGB);
-		memcpy(data, cvt_img_after.data, buffSize);
+		memcpy(data, cvt_img_after.data, buffSize);*/
+
+		memcpy(data, buffData, buffSize);
 	}
 	else if (format_callback == "Mono8")
 	{
