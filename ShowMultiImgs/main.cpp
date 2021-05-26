@@ -58,7 +58,7 @@ uint8_t* in_img_multi_src, *in_img_multi_src0;
 
 //時間に関する変数
 LARGE_INTEGER start, stop, freq;
-LARGE_INTEGER takestart, takeend;
+LARGE_INTEGER takestart, takeend1;
 LARGE_INTEGER takestart0, takeend0;
 LARGE_INTEGER hscstart, hscend;
 double taketime = 0, taketime0 = 0, hsctime = 0;
@@ -73,25 +73,13 @@ struct Logs
 };
 
 //プロトタイプ宣言
-void TakePicture(kayacoaxpress* cam, kayacoaxpress* cam0, bool* flg);
 void TakePicture0(kayacoaxpress* cam, bool* flg);
+void TakePicture1(kayacoaxpress* cam, bool* flg);
 
 using namespace std;
 
-#define GETPOINTSREALSENSE_THREAD_
-#define GETRELPOSE_THREAD_
 #define SHOW_PROCESSING_TIME_
-#define SHOW_IMGS_THREAD_
-#define SHOW_OPENGL_THREAD_
-//#define DEBUG_
-#define ROI_MODE_
 
-#define SAVE_IMGS_
-//#define SAVE_IMGS_HSC_
-//#define SAVE_IMGS_AT_HIGHSPEED_
-//#define SAVE_IMGS_REALSENSE_
-#define SAVE_HSC2MK_POSE_
-//#define MOVE_AXISROBOT_
 
 int main() {
 	//パラメータ
@@ -145,18 +133,14 @@ int main() {
 	}
 
 
-	//
-	Logs logs;
-
-
 	//カメラ起動
 	cout << "Camera Start!" << endl;
 	cam.start();
 	cam0.start();
 
 	//スレッド作成
-	thread TakePictureThread(TakePicture, &cam, &cam0, &flg);
-	//thread TakePictureThread0(TakePicture0, &cam0, &flg);
+	thread TakePictureThread0(TakePicture0, &cam0, &flg);
+	thread TakePictureThread1(TakePicture1, &cam, &flg);
 
 
 
@@ -202,8 +186,8 @@ int main() {
 	}
 
 	//スレッド削除
-	if (TakePictureThread.joinable())TakePictureThread.join();
-	//if (TakePictureThread0.joinable())TakePictureThread0.join();
+	if (TakePictureThread0.joinable())TakePictureThread0.join();
+	if (TakePictureThread1.joinable())TakePictureThread1.join();
 
 
 
@@ -216,35 +200,6 @@ int main() {
 	return 0;
 }
 
-//画像を格納する
-void TakePicture(kayacoaxpress* cam, kayacoaxpress* cam0, bool* flg) {
-	while (*flg)
-	{
-		QueryPerformanceCounter(&takestart);
-		takepicid = in_imgs_saveid % ringbuffersize;
-		in_img_multi_src = in_imgs[takepicid].ptr<uint8_t>(0);
-
-		cam->captureFrame2(in_img_multi_src, multicnt);
-
-		takepicid0 = in_imgs_saveid0 % ringbuffersize;
-		in_img_multi_src0 = in_imgs0[takepicid0].ptr<uint8_t>(0);
-
-		cam0->captureFrame2(in_img_multi_src0, multicnt);
-		QueryPerformanceCounter(&takeend);
-		taketime = (double)(takeend.QuadPart - takestart.QuadPart) / freq.QuadPart;
-		while (taketime < takepic_time)
-		{
-			QueryPerformanceCounter(&takeend);
-			taketime = (double)(takeend.QuadPart - takestart.QuadPart) / freq.QuadPart;
-		}
-		in_imgs_saveid = (in_imgs_saveid + 1) % ringbuffersize;
-		in_imgs_saveid0 = (in_imgs_saveid0 + 1) % ringbuffersize;
-
-#ifdef SHOW_PROCESSING_TIME_
-		std::cout << "TakePicture() time: " << taketime << endl;
-#endif // SHOW_PROCESSING_TIME_
-	}
-}
 
 void TakePicture0(kayacoaxpress* cam, bool* flg) {
 	while (*flg)
@@ -256,12 +211,35 @@ void TakePicture0(kayacoaxpress* cam, bool* flg) {
 		cam->captureFrame2(in_img_multi_src0, multicnt);
 		QueryPerformanceCounter(&takeend0);
 		taketime0 = (double)(takeend0.QuadPart - takestart0.QuadPart) / freq.QuadPart;
-		while (taketime < takepic_time)
+		while (taketime0 < takepic_time)
 		{
 			QueryPerformanceCounter(&takeend0);
 			taketime0 = (double)(takeend0.QuadPart - takestart0.QuadPart) / freq.QuadPart;
 		}
 		in_imgs_saveid0 = (in_imgs_saveid0 + 1) % ringbuffersize;
+
+#ifdef SHOW_PROCESSING_TIME_
+		std::cout << "TakePicture() time: " << taketime0 << endl;
+#endif // SHOW_PROCESSING_TIME_
+	}
+}
+
+void TakePicture1(kayacoaxpress* cam, bool* flg) {
+	while (*flg)
+	{
+		QueryPerformanceCounter(&takestart);
+		takepicid = in_imgs_saveid % ringbuffersize;
+		in_img_multi_src = in_imgs[takepicid].ptr<uint8_t>(0);
+
+		cam->captureFrame2(in_img_multi_src, multicnt);
+		QueryPerformanceCounter(&takeend1);
+		taketime = (double)(takeend1.QuadPart - takestart.QuadPart) / freq.QuadPart;
+		while (taketime < takepic_time)
+		{
+			QueryPerformanceCounter(&takeend1);
+			taketime = (double)(takeend1.QuadPart - takestart.QuadPart) / freq.QuadPart;
+		}
+		in_imgs_saveid = (in_imgs_saveid + 1) % ringbuffersize;
 
 #ifdef SHOW_PROCESSING_TIME_
 		std::cout << "TakePicture() time: " << taketime << endl;
