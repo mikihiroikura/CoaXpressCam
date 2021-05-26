@@ -50,56 +50,31 @@ double map_coeff[4], stretch_mat[4], det, distort[4];
 
 /// 画像に関するパラメータ
 const int ringbuffersize = 10;
-vector<cv::Mat> in_imgs_on, in_imgs_off, in_imgs;
-vector<bool> processflgs;
-cv::Mat zero, full, zeromulti, show_img, logsaveimg;
-int takepicid, in_imgs_saveid, log_img_saveid;
+vector<cv::Mat> in_imgs, in_imgs0;
+cv::Mat zero, full, zeromulti, show_img, show_img0;
+int takepicid, in_imgs_saveid, takepicid0, in_imgs_saveid0;
 const int multicnt = 1;
-uint8_t* in_img_multi_src, * detectimg_multi_src;
+uint8_t* in_img_multi_src, *in_img_multi_src0;
 
 //時間に関する変数
 LARGE_INTEGER start, stop, freq;
 LARGE_INTEGER takestart, takeend;
-LARGE_INTEGER savehscstart, savehscend;
+LARGE_INTEGER takestart0, takeend0;
 LARGE_INTEGER hscstart, hscend;
-LARGE_INTEGER glstart, glend;
-LARGE_INTEGER logstart, logend, glrslogend, hsclogend;
-LARGE_INTEGER detectstart, detectstartdebug, detectend;
-double taketime = 0, hsctime = 0, logtime = 0, gltime = 0, glrslogtime = 0, hsclogtime = 0, savehsctime = 0;
-double timer = 0, gltimer = 0;
-double detecttimea = 0, detecttimeb = 0, detecttimec = 0, detecttimed = 0, detecttimee = 0, detecttimef = 0, detecttime = 0;
+double taketime = 0, taketime0 = 0, hsctime = 0;
+double timer = 0;
 
 
 //ログに関するパラメータ
-const int timeout = 10;
-const int log_img_fps = 70;
-const int log_img_fps_hs = 500;
-const int log_led_fps = 500;
-const int log_img_finish_cnt = log_img_fps * timeout + 100;
-const int log_img_finish_cnt_hs = log_img_fps_hs * timeout + 100;
-const int log_pose_finish_cnt = log_led_fps * timeout + 100;
-long long log_glrsimg_cnt = 0, log_hscimg_cnt = 0, log_pose_cnt = 0;
-bool showsavehscimg = false, showsaveglimg = false;
-uint8_t* save_img_on_src;
-bool saveimgsflg = false, saveimgsstartflg = false;
 struct Logs
 {
 	vector<cv::Mat> in_imgs_log;
-	vector<cv::Mat> gl_imgs_log;
-	vector<vector<cv::Mat>> rs_imgs_log;
 	cv::Mat* in_imgs_log_ptr;
-	cv::Mat* gl_imgs_log_ptr;
-	double* LED_times;
-	double* log_times;
-	double* glrslog_times;
-	double* glrslog_times_diff;
-	double* hsclog_times;
-	double* hsclog_times_diff;
-	int* LED_results;
 };
 
 //プロトタイプ宣言
-void TakePicture(kayacoaxpress* cam, bool* flg, Logs* logs);
+void TakePicture(kayacoaxpress* cam, kayacoaxpress* cam0, bool* flg);
+void TakePicture0(kayacoaxpress* cam, bool* flg);
 
 using namespace std;
 
@@ -122,6 +97,24 @@ int main() {
 	//パラメータ
 	bool flg = true;
 	if (!QueryPerformanceFrequency(&freq)) { return 0; }// 単位習得
+
+	//カメラ0の初期化
+	kayacoaxpress cam0;
+	cam0.connect(0);
+
+	//カメラパラメータの設定
+	cout << "Set Camera Params..." << endl;
+	cam0.setParam(paramTypeKAYACoaXpress::AcquisitionMode::EnableAcquisitionFrameRate, 0); //トリガーモードで起動
+	cam0.setParam(paramTypeCamera::paramInt::WIDTH, width);
+	cam0.setParam(paramTypeCamera::paramInt::HEIGHT, height);
+	cam0.setParam(paramTypeKAYACoaXpress::paramInt::OffsetX, offsetx);
+	cam0.setParam(paramTypeKAYACoaXpress::paramInt::OffsetY, offsety);
+	cam0.setParam(paramTypeCamera::paramFloat::FPS, fps);
+	cam0.setParam(paramTypeKAYACoaXpress::paramFloat::ExposureTime, exposuretime);
+	cam0.setParam(paramTypeKAYACoaXpress::Gain::x1);
+	cam0.setParam(paramTypeKAYACoaXpress::CaptureType::BayerGRGrab);
+	cam0.parameter_all_print();
+
 
 	//カメラの初期化
 	kayacoaxpress cam;
@@ -148,7 +141,7 @@ int main() {
 	for (size_t i = 0; i < ringbuffersize; i++)
 	{
 		in_imgs.push_back(zeromulti.clone());
-		processflgs.push_back(false);
+		in_imgs0.push_back(zeromulti.clone());
 	}
 
 
@@ -159,9 +152,11 @@ int main() {
 	//カメラ起動
 	cout << "Camera Start!" << endl;
 	cam.start();
+	cam0.start();
 
 	//スレッド作成
-	thread TakePictureThread(TakePicture, &cam, &flg, &logs);
+	thread TakePictureThread(TakePicture, &cam, &cam0, &flg);
+	//thread TakePictureThread0(TakePicture0, &cam0, &flg);
 
 
 
@@ -181,13 +176,17 @@ int main() {
 	while (flg)
 	{
 		QueryPerformanceCounter(&hscstart);
-		showsavehscimg = false;
 
 		//OpenCVで画像表示
 		cv::cvtColor(in_imgs[(in_imgs_saveid - 2 + ringbuffersize) % ringbuffersize], show_img, CV_RGB2BGR);
 		cv::imshow("img", show_img);
 		int key = cv::waitKey(1);
 		if (key == 'q') flg = false;
+
+		cv::cvtColor(in_imgs0[(in_imgs_saveid0 - 2 + ringbuffersize) % ringbuffersize], show_img0, CV_RGB2BGR);
+		cv::imshow("img0", show_img0);
+		int key0 = cv::waitKey(1);
+		if (key0 == 'q') flg = false;
 
 		QueryPerformanceCounter(&hscend);
 		hsctime = (double)(hscend.QuadPart - hscstart.QuadPart) / freq.QuadPart;
@@ -196,7 +195,6 @@ int main() {
 			QueryPerformanceCounter(&hscend);
 			hsctime = (double)(hscend.QuadPart - hscstart.QuadPart) / freq.QuadPart;
 		}
-		showsavehscimg = true;
 
 #ifdef SHOW_PROCESSING_TIME_
 		std::cout << "ShowImgsHSC() time: " << hsctime << endl;
@@ -205,18 +203,21 @@ int main() {
 
 	//スレッド削除
 	if (TakePictureThread.joinable())TakePictureThread.join();
+	//if (TakePictureThread0.joinable())TakePictureThread0.join();
 
 
 
 	//カメラの停止
 	cam.stop();
 	cam.disconnect();
+	cam0.stop();
+	cam0.disconnect();
 
 	return 0;
 }
 
 //画像を格納する
-void TakePicture(kayacoaxpress* cam, bool* flg, Logs* logs) {
+void TakePicture(kayacoaxpress* cam, kayacoaxpress* cam0, bool* flg) {
 	while (*flg)
 	{
 		QueryPerformanceCounter(&takestart);
@@ -224,6 +225,11 @@ void TakePicture(kayacoaxpress* cam, bool* flg, Logs* logs) {
 		in_img_multi_src = in_imgs[takepicid].ptr<uint8_t>(0);
 
 		cam->captureFrame2(in_img_multi_src, multicnt);
+
+		takepicid0 = in_imgs_saveid0 % ringbuffersize;
+		in_img_multi_src0 = in_imgs0[takepicid0].ptr<uint8_t>(0);
+
+		cam0->captureFrame2(in_img_multi_src0, multicnt);
 		QueryPerformanceCounter(&takeend);
 		taketime = (double)(takeend.QuadPart - takestart.QuadPart) / freq.QuadPart;
 		while (taketime < takepic_time)
@@ -232,7 +238,7 @@ void TakePicture(kayacoaxpress* cam, bool* flg, Logs* logs) {
 			taketime = (double)(takeend.QuadPart - takestart.QuadPart) / freq.QuadPart;
 		}
 		in_imgs_saveid = (in_imgs_saveid + 1) % ringbuffersize;
-		processflgs[takepicid] = true;
+		in_imgs_saveid0 = (in_imgs_saveid0 + 1) % ringbuffersize;
 
 #ifdef SHOW_PROCESSING_TIME_
 		std::cout << "TakePicture() time: " << taketime << endl;
@@ -240,3 +246,25 @@ void TakePicture(kayacoaxpress* cam, bool* flg, Logs* logs) {
 	}
 }
 
+void TakePicture0(kayacoaxpress* cam, bool* flg) {
+	while (*flg)
+	{
+		QueryPerformanceCounter(&takestart0);
+		takepicid0 = in_imgs_saveid0 % ringbuffersize;
+		in_img_multi_src0 = in_imgs0[takepicid0].ptr<uint8_t>(0);
+
+		cam->captureFrame2(in_img_multi_src0, multicnt);
+		QueryPerformanceCounter(&takeend0);
+		taketime0 = (double)(takeend0.QuadPart - takestart0.QuadPart) / freq.QuadPart;
+		while (taketime < takepic_time)
+		{
+			QueryPerformanceCounter(&takeend0);
+			taketime0 = (double)(takeend0.QuadPart - takestart0.QuadPart) / freq.QuadPart;
+		}
+		in_imgs_saveid0 = (in_imgs_saveid0 + 1) % ringbuffersize;
+
+#ifdef SHOW_PROCESSING_TIME_
+		std::cout << "TakePicture() time: " << taketime << endl;
+#endif // SHOW_PROCESSING_TIME_
+	}
+}
