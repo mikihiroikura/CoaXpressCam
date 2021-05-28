@@ -69,12 +69,16 @@ double timer = 0;
 struct Logs
 {
 	vector<cv::Mat> in_imgs_log;
-	cv::Mat* in_imgs_log_ptr;
+	uint8_t* in_imgs_log_ptr;
+	LARGE_INTEGER take_start, take_end;
+	double taketime;
+	int takepic_id, in_imgs_id;
 };
 
 //プロトタイプ宣言
 void TakePicture0(kayacoaxpress* cam, bool* flg);
 void TakePicture1(kayacoaxpress* cam, bool* flg);
+void TakePicture(kayacoaxpress* cam, bool* flg, Logs *log);
 
 using namespace std;
 
@@ -88,6 +92,7 @@ int main() {
 
 	//カメラ0の初期化
 	kayacoaxpress cam0;
+	Logs log0;
 	cam0.connect(0);
 
 	//カメラパラメータの設定
@@ -106,6 +111,7 @@ int main() {
 
 	//カメラの初期化
 	kayacoaxpress cam;
+	Logs log;
 	cam.connect(1);
 
 	//カメラパラメータの設定
@@ -130,7 +136,15 @@ int main() {
 	{
 		in_imgs.push_back(zeromulti.clone());
 		in_imgs0.push_back(zeromulti.clone());
+		log0.in_imgs_log.push_back(zeromulti.clone());
+		log.in_imgs_log.push_back(zeromulti.clone());
 	}
+
+	//Logの初期化
+	log.in_imgs_id = 0;
+	log.takepic_id = 0;
+	log0.in_imgs_id = 0;
+	log0.takepic_id = 0;
 
 
 	//カメラ起動
@@ -139,9 +153,11 @@ int main() {
 	cam0.start();
 
 	//スレッド作成
-	thread TakePictureThread0(TakePicture0, &cam0, &flg);
-	thread TakePictureThread1(TakePicture1, &cam, &flg);
+	//thread TakePictureThread0(TakePicture0, &cam0, &flg);
+	//thread TakePictureThread1(TakePicture1, &cam, &flg);
 
+	thread TakePictureThread0(TakePicture, &cam0, &flg, &log0);
+	thread TakePictureThread1(TakePicture, &cam, &flg, &log);
 
 
 
@@ -162,12 +178,14 @@ int main() {
 		QueryPerformanceCounter(&hscstart);
 
 		//OpenCVで画像表示
-		cv::cvtColor(in_imgs[(in_imgs_saveid - 2 + ringbuffersize) % ringbuffersize], show_img, CV_RGB2BGR);
+		//cv::cvtColor(in_imgs[(in_imgs_saveid - 2 + ringbuffersize) % ringbuffersize], show_img, CV_RGB2BGR);
+		cv::cvtColor(log.in_imgs_log[(log.in_imgs_id - 2 + ringbuffersize) % ringbuffersize], show_img, CV_RGB2BGR);
 		cv::imshow("img", show_img);
 		int key = cv::waitKey(1);
 		if (key == 'q') flg = false;
 
-		cv::cvtColor(in_imgs0[(in_imgs_saveid0 - 2 + ringbuffersize) % ringbuffersize], show_img0, CV_RGB2BGR);
+		//cv::cvtColor(in_imgs0[(in_imgs_saveid0 - 2 + ringbuffersize) % ringbuffersize], show_img0, CV_RGB2BGR);
+		cv::cvtColor(log0.in_imgs_log[(log0.in_imgs_id - 2 + ringbuffersize) % ringbuffersize], show_img0, CV_RGB2BGR);
 		cv::imshow("img0", show_img0);
 		int key0 = cv::waitKey(1);
 		if (key0 == 'q') flg = false;
@@ -243,6 +261,29 @@ void TakePicture1(kayacoaxpress* cam, bool* flg) {
 
 #ifdef SHOW_PROCESSING_TIME_
 		std::cout << "TakePicture() time: " << taketime << endl;
+#endif // SHOW_PROCESSING_TIME_
+	}
+}
+
+void TakePicture(kayacoaxpress* cam, bool* flg, Logs *log) {
+	while (*flg)
+	{
+		QueryPerformanceCounter(&log->take_start);
+		log->takepic_id = log->in_imgs_id % ringbuffersize;
+		log->in_imgs_log_ptr = log->in_imgs_log[log->takepic_id].ptr<uint8_t>(0);
+
+		cam->captureFrame2(log->in_imgs_log_ptr, multicnt);
+		QueryPerformanceCounter(&log->take_end);
+		log->taketime= (double)(log->take_end.QuadPart - log->take_start.QuadPart) / freq.QuadPart;
+		while (log->taketime < takepic_time)
+		{
+			QueryPerformanceCounter(&log->take_end);
+			log->taketime = (double)(log->take_end.QuadPart - log->take_start.QuadPart) / freq.QuadPart;
+		}
+		log->in_imgs_id = (log->in_imgs_id + 1) % ringbuffersize;
+
+#ifdef SHOW_PROCESSING_TIME_
+		std::cout << "TakePicture() time: " << log->taketime << endl;
 #endif // SHOW_PROCESSING_TIME_
 	}
 }
